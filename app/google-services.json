@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "9466236627",
+    "firebase_url": "https://foodbook-itkmitl.firebaseio.com",
+    "project_id": "foodbook-itkmitl",
+    "storage_bucket": "foodbook-itkmitl.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9466236627:android:75ec4cad287d3258",
+        "android_client_info": {
+          "package_name": "com.itkmitl59.foodbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9466236627-qi3je5hf3lm68s44maa5vollcsq8grbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ6P9VSqDTXhO4CjqE27os08LVWF_Rcs0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
