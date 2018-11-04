@@ -4,7 +4,10 @@ public class FoodRecipe {
     private String name;
     private String mainImageUrl;
     private String howTo;
-    private String ingredients;
+    private String ingredients; // ส่วนผสม
+
+    public FoodRecipe() {
+    }
 
     public String getName() {
         return name;
