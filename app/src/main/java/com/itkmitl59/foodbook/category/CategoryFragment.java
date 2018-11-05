@@ -1,4 +1,4 @@
-package com.itkmitl59.foodbook;
+package com.itkmitl59.foodbook.category;
 
 
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.itkmitl59.foodbook.R;
 
 public class CategoryFragment extends Fragment {
 
