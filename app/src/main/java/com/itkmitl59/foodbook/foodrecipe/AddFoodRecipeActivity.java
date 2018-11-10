@@ -137,15 +137,17 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     private void saveFoodRecipe(String imageUrl) {
         // TODO : set all data to food recipe
+        String ducumentName = "food_" + System.currentTimeMillis();
+
         FoodRecipe foodRecipe = new FoodRecipe();
         SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy - HH:mm");
+        foodRecipe.setUid(ducumentName);
         foodRecipe.setName(foodName.getText().toString());
         foodRecipe.setHowTos(getHowTo());
         foodRecipe.setIngredients(foodIngredients.getText().toString());
         foodRecipe.setMainImageUrl(imageUrl);
         foodRecipe.setPostDate(format.format(new Date()));
 
-        String ducumentName = "food_" + System.currentTimeMillis();
 
         firestore.collection("FoodRecipes")
                 .document(ducumentName)
