@@ -1,13 +1,19 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.itkmitl59.foodbook.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -16,10 +22,16 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
     private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ImageView foodImage;
+        public TextView foodName;
+        public Button foodDetailButton;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            // ......
+            foodImage = itemView.findViewById(R.id.food_image_item);
+            foodName = itemView.findViewById(R.id.food_name_item);
+            foodDetailButton = itemView.findViewById(R.id.view_food_recipe);
         }
     }
 
@@ -32,10 +44,16 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FoodRecipe foodRecipe = mFoodRecipes.get(position);
+        final FoodRecipe foodRecipe = mFoodRecipes.get(position);
 
-        // ......
-        // ......
+        Picasso.get().load(foodRecipe.getMainImageUrl()).fit().centerCrop().into(holder.foodImage);
+        holder.foodName.setText(foodRecipe.getName());
+        holder.foodDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startIntent(foodRecipe.getUid());
+            }
+        });
     }
 
     @NonNull
@@ -51,4 +69,9 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         return mFoodRecipes.size();
     }
 
+    private void startIntent(String foodID){
+        Intent intent = new Intent(mContext, FoodDetailActivity.class);
+        intent.putExtra("id", foodID);
+        mContext.startActivity(intent);
+    }
 }

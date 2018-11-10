@@ -12,6 +12,7 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -24,6 +25,10 @@ import com.google.firebase.storage.UploadTask;
 import com.itkmitl59.foodbook.R;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class AddFoodRecipeActivity extends AppCompatActivity {
     private static final String TAG = "Add Food Activity";
     private ImageView foodImage;
@@ -33,6 +38,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     private Button foodAddButton;
     private ProgressBar progressBar;
     private Uri imageUri;
+    private int insert_index = 4;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -62,7 +68,18 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setLoading(true);
                 showLog("Click add button");
-                uploadImage();
+//                uploadImage();
+
+                // TODO : this for test
+                saveFoodRecipe("http://static.asiawebdirect.com/m/.imaging/678x452/website/bangkok/portals/bangkok-com/homepage/food-top10/allParagraphs/01/top10Set/0/image.jpg");
+            }
+        });
+
+        Button addHowTo = findViewById(R.id.add_how_to);
+        addHowTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addEditText();
             }
         });
     }
@@ -119,14 +136,19 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     }
 
     private void saveFoodRecipe(String imageUrl) {
+        // TODO : set all data to food recipe
         FoodRecipe foodRecipe = new FoodRecipe();
+        SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy - HH:mm");
         foodRecipe.setName(foodName.getText().toString());
-        foodRecipe.setHowTo(foodHowTo.getText().toString());
+        foodRecipe.setHowTos(getHowTo());
         foodRecipe.setIngredients(foodIngredients.getText().toString());
         foodRecipe.setMainImageUrl(imageUrl);
+        foodRecipe.setPostDate(format.format(new Date()));
+
+        String ducumentName = "food_" + System.currentTimeMillis();
 
         firestore.collection("FoodRecipes")
-                .document()
+                .document(ducumentName)
                 .set(foodRecipe)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -160,8 +182,8 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         }
     }
 
-    private void setLoading(boolean isLoading){
-        if(isLoading) {
+    private void setLoading(boolean isLoading) {
+        if (isLoading) {
             foodAddButton.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
@@ -176,5 +198,50 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     private void showLog(String text) {
         Log.d(TAG, text);
+    }
+
+    private void addEditText() {
+        // TODO : make it complete
+
+        LinearLayout layout = findViewById(R.id.add_food);
+
+        // add view
+        EditText text = new EditText(this);
+        text.setText("+ ");
+        text.setTag("how_to");
+        layout.addView(text, insert_index);
+        insert_index++;
+
+        // add layout
+//        View.inflate(this, R.layout.how_to_input, layout);
+    }
+
+    private boolean isEditText(View view) {
+        if (view instanceof EditText && view.getTag() != null && view.getTag().equals("how_to")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private ArrayList<HowTo> getHowTo() {
+        LinearLayout layout = findViewById(R.id.add_food);
+        ArrayList<HowTo> howTos = new ArrayList<>();
+
+        for (int i = 0; i < layout.getChildCount() - 1; i++) {
+            View view = layout.getChildAt(i);
+
+            if (isEditText(view)) {
+                EditText editText = (EditText) layout.getChildAt(i);
+
+                HowTo howTo = new HowTo();
+                howTo.setDescription(editText.getText().toString());
+                showLog("text " + editText.getText().toString());
+
+                howTos.add(howTo);
+            }
+        }
+
+        return howTos;
     }
 }

@@ -1,17 +1,37 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FoodRecipe {
+    private String uid;
     private String name;
     private String description;
     private String mainImageUrl;
-    private String howTo;
+    private List<HowTo> howTos;
     private String ingredients; // ส่วนผสม
     private String category;
-    private ArrayList<Double> score;
+    private int like;
+    private String postDate;
+    private String owner;
 
     public FoodRecipe() {
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public List<HowTo> getHowTos() {
+        return howTos;
+    }
+
+    public void setHowTos(List<HowTo> howTos) {
+        this.howTos = howTos;
     }
 
     public String getName() {
@@ -28,14 +48,6 @@ public class FoodRecipe {
 
     public void setMainImageUrl(String mainImageUrl) {
         this.mainImageUrl = mainImageUrl;
-    }
-
-    public String getHowTo() {
-        return howTo;
-    }
-
-    public void setHowTo(String howTo) {
-        this.howTo = howTo;
     }
 
     public String getIngredients() {
@@ -62,11 +74,27 @@ public class FoodRecipe {
         this.description = description;
     }
 
-    public ArrayList<Double> getScore() {
-        return score;
+    public int getLike() {
+        return like;
     }
 
-    public void setScore(ArrayList<Double> score) {
-        this.score = score;
+    public void setLike(int like) {
+        this.like = like;
+    }
+
+    public String getPostDate() {
+        return postDate;
+    }
+
+    public void setPostDate(String postDate) {
+        this.postDate = postDate;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }

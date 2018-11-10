@@ -1,19 +1,10 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
 public class HowTo {
-    private String title;
     private String description;
     private String imageUrl;
 
     public HowTo() {
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getDescription() {

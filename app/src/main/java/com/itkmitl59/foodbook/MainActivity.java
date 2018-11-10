@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.itkmitl59.foodbook.foodrecipe.AddFoodRecipeActivity;
+import com.itkmitl59.foodbook.foodrecipe.FoodListActivity;
+import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -16,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // FOR TEST
-        auth.signInWithEmailAndPassword("admin@admin.com", "adminadmin");
-        startActivity(new Intent(this, AddFoodRecipeActivity.class));
+        auth.signInWithEmailAndPassword("a@a.com", "12341234");
+        startActivity(new Intent(this, FoodListActivity.class));
     }
 }
