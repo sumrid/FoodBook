@@ -15,15 +15,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.itkmitl59.foodbook.Like;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.comment.Comment;
 import com.itkmitl59.foodbook.comment.CommentAdapter;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,6 +39,7 @@ import javax.annotation.Nullable;
 public class FoodDetailActivity extends AppCompatActivity {
     private static final String TAG = "Food Detail Activity";
     private String foodID;
+    private FoodRecipe mFoodRecipe;
 
     private ImageView foodImage;
     private TextView foodName;
@@ -44,11 +49,14 @@ public class FoodDetailActivity extends AppCompatActivity {
     private RecyclerView commentList;
     private EditText commentMessage;
     private Button postComment;
+    private LikeButton likeButton;
+    private TextView likeCount;
     private CommentAdapter adapter;
 
     private List<Comment> comments;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,22 @@ public class FoodDetailActivity extends AppCompatActivity {
         getDataFromFirebase();
 
         // TODO : like system
+        likeCount = findViewById(R.id.like_count);
+        likeButton = findViewById(R.id.like_button);
+        checkUserLiked();
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                log("like button - "+likeButton.isLiked());
+                manageLike(likeButton.isLiked());
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                log("like button - "+likeButton.isLiked());
+                manageLike(likeButton.isLiked());
+            }
+        });
     }
 
     private void log(String text) {
@@ -96,7 +120,8 @@ public class FoodDetailActivity extends AppCompatActivity {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                         log("load Food Recipe");
-                        setDisplay(documentSnapshot.toObject(FoodRecipe.class));
+                        mFoodRecipe = documentSnapshot.toObject(FoodRecipe.class);
+                        setDisplay(mFoodRecipe);
                     }
                 });
 
@@ -121,9 +146,11 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodDescription.setText(item.getDescription());
         foodIngredients.setText(item.getIngredients());
         setDisplayHowTo(item.getHowTos());
+        likeCount.setText("ถูกใจ " + item.getLike());
     }
 
     private void setDisplayHowTo(List<HowTo> howTo) {
+        howToList.removeAllViews();
         for (HowTo item : howTo) {
             View view = getLayoutInflater().inflate(R.layout.how_to_item, null);
 
@@ -171,4 +198,41 @@ public class FoodDetailActivity extends AppCompatActivity {
                 });
     }
 
+    private void manageLike(boolean isLiked){
+        int num = 0;
+        if(isLiked) {
+            num = 1;
+            Like like = new Like(foodID, auth.getCurrentUser().getUid());
+            firestore.collection("liked")
+                    .document(foodID + "_" + auth.getCurrentUser().getUid())
+                    .set(like);
+        } else {
+            num = -1;
+            String documentName = foodID + "_" + auth.getCurrentUser().getUid();
+            firestore.collection("liked")
+                    .document(documentName)
+                    .delete();
+        }
+
+        // update like count
+        firestore.collection("FoodRecipes")
+                .document(foodID)
+                .update("like", num + mFoodRecipe.getLike());
+    }
+
+    private void checkUserLiked(){
+        log("check user liked");
+        firestore.collection("liked")
+                .whereEqualTo("foodID", foodID)
+                .whereEqualTo("userID", auth.getCurrentUser().getUid())
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        if(queryDocumentSnapshots.size() > 0) {
+                            log("user liked");
+                            likeButton.setLiked(true);
+                        }
+                    }
+                });
+    }
 }

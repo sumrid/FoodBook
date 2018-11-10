@@ -24,7 +24,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.like.LikeButton
-                android:id="@+id/star_button"
+                android:id="@+id/like_button"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
@@ -124,6 +124,17 @@
                 android:text="ส่ง"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/comment_message_input" />
+
+            <TextView
+                android:id="@+id/like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="16dp"
+                android:text="TextView"
+                app:layout_constraintStart_toEndOf="@+id/like_button"
+                app:layout_constraintTop_toBottomOf="@+id/food_detail_descrip"
+                tools:text="ถูกใจ " />
 
         </android.support.constraint.ConstraintLayout>
 
