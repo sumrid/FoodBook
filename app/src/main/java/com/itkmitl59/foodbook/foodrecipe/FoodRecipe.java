@@ -14,6 +14,7 @@ public class FoodRecipe {
     private int like;
     private String postDate;
     private String owner;
+    private int views;
 
     public FoodRecipe() {
     }
@@ -96,5 +97,13 @@ public class FoodRecipe {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

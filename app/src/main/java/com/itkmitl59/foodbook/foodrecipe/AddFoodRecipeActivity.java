@@ -1,10 +1,12 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -22,12 +25,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class AddFoodRecipeActivity extends AppCompatActivity {
     private static final String TAG = "Add Food Activity";
@@ -35,10 +40,12 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     private EditText foodName;
     private EditText foodHowTo;
     private EditText foodIngredients;
+    private EditText foodCategory;
     private Button foodAddButton;
     private ProgressBar progressBar;
     private Uri imageUri;
-    private int insert_index = 4;
+
+    static List<HowTo> howTo = new ArrayList<>();
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -54,8 +61,15 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         foodHowTo = findViewById(R.id.food_how_to);
         foodIngredients = findViewById(R.id.food_ingredients);
         foodAddButton = findViewById(R.id.food_add_button);
+        foodCategory = findViewById(R.id.food_category);
         progressBar = findViewById(R.id.progressBar);
 
+        foodCategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogSelect();
+            }
+        });
         foodImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,10 +82,10 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setLoading(true);
                 showLog("Click add button");
-//                uploadImage();
+                uploadImage();
 
                 // TODO : this for test
-                saveFoodRecipe("http://static.asiawebdirect.com/m/.imaging/678x452/website/bangkok/portals/bangkok-com/homepage/food-top10/allParagraphs/01/top10Set/0/image.jpg");
+//                saveFoodRecipe("http://static.asiawebdirect.com/m/.imaging/678x452/website/bangkok/portals/bangkok-com/homepage/food-top10/allParagraphs/01/top10Set/0/image.jpg");
             }
         });
 
@@ -79,9 +93,11 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         addHowTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addEditText();
+                addHowTo();
             }
         });
+
+        setDisplayHowTo(howTo);
     }
 
 
@@ -143,11 +159,13 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy - HH:mm");
         foodRecipe.setUid(ducumentName);
         foodRecipe.setName(foodName.getText().toString());
-        foodRecipe.setHowTos(getHowTo());
+        foodRecipe.setHowTos(howTo);
         foodRecipe.setIngredients(foodIngredients.getText().toString());
         foodRecipe.setMainImageUrl(imageUrl);
         foodRecipe.setPostDate(format.format(new Date()));
-
+        foodRecipe.setCategory(foodCategory.getText().toString());
+//        foodRecipe.setOwner();
+//        foodRecipe.setDescription();
 
         firestore.collection("FoodRecipes")
                 .document(ducumentName)
@@ -202,48 +220,74 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         Log.d(TAG, text);
     }
 
-    private void addEditText() {
+    private void addHowTo() {
         // TODO : make it complete
 
-        LinearLayout layout = findViewById(R.id.add_food);
-
-        // add view
-        EditText text = new EditText(this);
-        text.setText("+ ");
-        text.setTag("how_to");
-        layout.addView(text, insert_index);
-        insert_index++;
+//        LinearLayout layout = findViewById(R.id.add_food);
+//
+//        // add view
+//        EditText text = new EditText(this);
+//        text.setText("+ ");
+//        text.setTag("how_to");
+//        layout.addView(text, insert_index);
+//
+//        ImageView howtoImage = new ImageView(this);
+//        howtoImage.setTag("how_to_image");
+//        howtoImage.setImageResource(R.drawable.select_image);
+//        howtoImage.setMaxHeight(50);
+//        layout.addView(howtoImage, insert_index+1);
+//        insert_index+=2;
 
         // add layout
 //        View.inflate(this, R.layout.how_to_input, layout);
+
+        Intent intent = new Intent(this, AddHowToActivity.class);
+        startActivity(intent);
     }
 
-    private boolean isEditText(View view) {
-        if (view instanceof EditText && view.getTag() != null && view.getTag().equals("how_to")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    private void setDisplayHowTo(List<HowTo> howTo) {
+        LinearLayout howToList = findViewById(R.id.how_to_list);
+        howToList.removeAllViews();
+        for (HowTo item : howTo) {
+            View view = getLayoutInflater().inflate(R.layout.how_to_item, null);
 
-    private ArrayList<HowTo> getHowTo() {
-        LinearLayout layout = findViewById(R.id.add_food);
-        ArrayList<HowTo> howTos = new ArrayList<>();
+            TextView howToView = view.findViewById(R.id.how_to_item);
+            TextView howToDescrip = view.findViewById(R.id.how_to_item_descrip);
+            ImageView imageView = view.findViewById(R.id.how_to_image);
 
-        for (int i = 0; i < layout.getChildCount() - 1; i++) {
-            View view = layout.getChildAt(i);
-
-            if (isEditText(view)) {
-                EditText editText = (EditText) layout.getChildAt(i);
-
-                HowTo howTo = new HowTo();
-                howTo.setDescription(editText.getText().toString());
-                showLog("text " + editText.getText().toString());
-
-                howTos.add(howTo);
+            howToView.setText(String.format("ขั้นตอน %d/%d", howTo.indexOf(item) + 1, howTo.size()));
+            howToDescrip.setText(item.getDescription());
+            if (item.getImageUrl() != null) {
+                imageView.setVisibility(View.VISIBLE);
+                Picasso.get().load(item.getImageUrl()).fit().centerCrop().into(imageView);
             }
+            howToList.addView(view);
         }
+    }
 
-        return howTos;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setDisplayHowTo(howTo);
+    }
+
+    private void showDialogSelect() {
+        // TODO : It's not complete
+        final String category[] = {"ผัด", "ทอด","นึ่ง", "ยำ"};
+
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setTitle("Select Category");
+        builder.setItems(category, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String selected = category[which];
+                foodCategory.setText(selected);
+            }
+        });
+        builder.setNegativeButton("ไม่ชอบซักทีม", null);
+        builder.create();
+
+        builder.show();
     }
 }

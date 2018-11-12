@@ -40,10 +40,31 @@
                 android:text="วิธีทำ"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:id="@+id/how_to_list"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/add_how_to"
-                android:text="Add how to"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add how to" />
+
+            <TextView
+                android:text="หมวดหมู่"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/food_category"
+                android:focusable="false"
+                android:hint="select category"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
             <Button

@@ -22,7 +22,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".foodrecipe.FoodDetailActivity" />
-        <activity android:name=".foodrecipe.FoodListActivity"></activity>
+        <activity android:name=".foodrecipe.FoodListActivity" />
+        <activity android:name=".foodrecipe.AddHowToActivity"></activity>
     </application>
 
 </manifest>

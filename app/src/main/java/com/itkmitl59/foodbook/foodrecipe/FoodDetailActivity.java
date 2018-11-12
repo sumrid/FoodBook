@@ -40,6 +40,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     private static final String TAG = "Food Detail Activity";
     private String foodID;
     private FoodRecipe mFoodRecipe;
+    private boolean isUpdatedView = false;
 
     private ImageView foodImage;
     private TextView foodName;
@@ -87,20 +88,19 @@ public class FoodDetailActivity extends AppCompatActivity {
 
         getDataFromFirebase();
 
-        // TODO : like system
         likeCount = findViewById(R.id.like_count);
         likeButton = findViewById(R.id.like_button);
         checkUserLiked();
         likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                log("like button - "+likeButton.isLiked());
+                log("like button - " + likeButton.isLiked());
                 manageLike(likeButton.isLiked());
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
-                log("like button - "+likeButton.isLiked());
+                log("like button - " + likeButton.isLiked());
                 manageLike(likeButton.isLiked());
             }
         });
@@ -122,6 +122,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                         log("load Food Recipe");
                         mFoodRecipe = documentSnapshot.toObject(FoodRecipe.class);
                         setDisplay(mFoodRecipe);
+                        updateView();
                     }
                 });
 
@@ -198,9 +199,9 @@ public class FoodDetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void manageLike(boolean isLiked){
+    private void manageLike(boolean isLiked) {
         int num = 0;
-        if(isLiked) {
+        if (isLiked) {
             num = 1;
             Like like = new Like(foodID, auth.getCurrentUser().getUid());
             firestore.collection("liked")
@@ -220,7 +221,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                 .update("like", num + mFoodRecipe.getLike());
     }
 
-    private void checkUserLiked(){
+    private void checkUserLiked() {
         log("check user liked");
         firestore.collection("liked")
                 .whereEqualTo("foodID", foodID)
@@ -228,11 +229,20 @@ public class FoodDetailActivity extends AppCompatActivity {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                        if(queryDocumentSnapshots.size() > 0) {
+                        if (queryDocumentSnapshots.size() > 0) {
                             log("user liked");
                             likeButton.setLiked(true);
                         }
                     }
                 });
+    }
+
+    private void updateView() {
+        if (!isUpdatedView) {
+            firestore.collection("FoodRecipes")
+                    .document(foodID)
+                    .update("views", mFoodRecipe.getViews() + 1);
+            isUpdatedView = true;
+        }
     }
 }
