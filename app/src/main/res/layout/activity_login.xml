@@ -1,9 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    android:background="@color/white"
+    android:fitsSystemWindows="true">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".LoginActivity"
+        android:background="#7AE9B9">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="306dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="182dp"
+                android:layout_height="114dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="73dp"
+                app:srcCompat="@drawable/app_logo" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="334dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/header">
+
+
+            <LinearLayout
+                android:id="@+id/inp_email"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerInParent="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#BBBABA"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="อีเมล์"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@color/transparent"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/inp_password"
+                android:layout_width="320dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/inp_email"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="25dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_regular"
+                    android:textColor="#BBBABA"
+                    android:text="รหัสผ่าน"
+                    android:textSize="14sp" />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@color/transparent"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="320dp"
+                android:layout_height="58dp"
+                android:layout_below="@+id/inp_password"
+                android:layout_alignStart="@+id/inp_email"
+                android:layout_marginTop="45dp"
+                android:background="#55AAFF"
+                android:fontFamily="@font/notosans_regular"
+                android:letterSpacing="0.05"
+                android:text="เข้าสู่ระบบ"
+                android:textColor="#FFFF"
+                android:textSize="19sp" />
+
+            <LinearLayout
+                android:id="@+id/text_regis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/button"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="ยังไม่มีบัญชีใช่ไหม?"
+                    android:textColor="#D2D2D2"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/regis_link"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_toRightOf="@+id/text_help"
+                    android:textColor="#393939"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="ลงทะเบียน"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

@@ -4,37 +4,54 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itkmitl59.foodbook.R;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
-public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.ViewHolder> {
+public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.ViewHolder>  {
     private ArrayList<FoodRecipe> mFoodRecipes;
     private Context mContext;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView foodImage;
-        public TextView foodName;
-        public Button foodDetailButton;
+        public TextView foodName, foodDescription,foodOwner;
+        private ClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             foodImage = itemView.findViewById(R.id.food_image_item);
             foodName = itemView.findViewById(R.id.food_name_item);
-            foodDetailButton = itemView.findViewById(R.id.view_food_recipe);
+            foodDescription = itemView.findViewById(R.id.food_description_item);
+            foodOwner = itemView.findViewById(R.id.food_owner_item);
+            itemView.setOnClickListener(this);
+
         }
+
+        public void setOnItemClickListener(ClickListener clickListener) {
+            this.clickListener = clickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+
     }
 
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+    }
 
 
     public FoodRecipeAdapter(ArrayList<FoodRecipe> dataSet, Context context) {
@@ -43,14 +60,16 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final FoodRecipe foodRecipe = mFoodRecipes.get(position);
-
         Picasso.get().load(foodRecipe.getMainImageUrl()).fit().centerCrop().into(holder.foodImage);
         holder.foodName.setText(foodRecipe.getName());
-        holder.foodDetailButton.setOnClickListener(new View.OnClickListener() {
+        holder.foodDescription.setText(foodRecipe.getDescription());
+        holder.foodOwner.setText("DisplayName");
+
+        holder.setOnItemClickListener(new ClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onItemClick(int position, View v) {
                 startIntent(foodRecipe.getUid());
             }
         });
@@ -63,6 +82,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
+
 
     @Override
     public int getItemCount() {

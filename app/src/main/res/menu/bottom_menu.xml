@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_home"
+        android:enabled="true"
+        android:icon="@drawable/home_ico"
+        android:title="หน้าแรก"/>
+    <item
+        android:id="@+id/menu_categoies"
+        android:enabled="true"
+        android:icon="@drawable/categories_ico"
+        android:title="หมวดหมู่"/>
+    <item
+        android:id="@+id/menu_addfood"
+        android:enabled="true"
+        android:icon="@drawable/addfood_ico"
+        android:title="เขียนเมนู" />
+    <item
+        android:id="@+id/menu_profile"
+        android:enabled="true"
+        android:icon="@drawable/profile_ico"
+        android:title="บัญชีผู้ใช้"/>
+
+</menu>
