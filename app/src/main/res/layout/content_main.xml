@@ -45,7 +45,10 @@
                             android:layout_marginEnd="10dp"
                             android:src="@drawable/search_icon"/>
                         <EditText
+                            android:id="@+id/search_recipe"
+                            android:imeOptions="actionSearch"
                             android:layout_width="match_parent"
+                            android:inputType="text"
                             android:layout_height="match_parent"
                             android:background="@color/transparent"
                             android:fontFamily="@font/notosans_regular"
@@ -99,7 +102,11 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <include layout="@layout/popular_food_item" />
+            <!--<include layout="@layout/popular_food_item" />-->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/popular_item_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
             <!--<android.support.v7.widget.RecyclerView-->
             <!--android:id="@+id/popular_food_list"-->
             <!--android:layout_width="match_parent"-->

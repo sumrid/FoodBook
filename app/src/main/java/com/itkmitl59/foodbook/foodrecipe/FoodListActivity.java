@@ -30,7 +30,12 @@ public class FoodListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_food_list);
 
         foodRecipes = new ArrayList<>();
-        loadDataSetFromFirebase();
+        if (getKeyword().isEmpty()) {
+            log("load all recipe");
+            loadDataSetFromFirebase();
+        } else {
+            getDataByKeyword(getKeyword());
+        }
         initRecyclerView();
     }
 
@@ -59,7 +64,31 @@ public class FoodListActivity extends AppCompatActivity {
                 });
     }
 
-    private void log(String text){
-        Log.d(TAG,text);
+    private void log(String text) {
+        Log.d(TAG, text);
+    }
+
+    private void getDataByKeyword(final String keyword) {
+        firestore.collection("FoodRecipes")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        foodRecipes.clear();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            FoodRecipe item = document.toObject(FoodRecipe.class);
+                            item.setUid(document.getId());
+                            if (item.getName().contains(keyword)) {
+                                foodRecipes.add(item);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    private String getKeyword() {
+        String keyword = getIntent().getStringExtra("keyword");
+        log(keyword);
+        return keyword;
     }
 }

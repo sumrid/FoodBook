@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
@@ -60,14 +60,16 @@
                         android:text="ปอซี่ อิอิ"
                         />
                 </LinearLayout>
+
                 <TextView
+                    android:id="@+id/popular_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:gravity="right"
-                    android:textSize="10sp"
                     android:layout_weight="1"
-                    android:text="Like 199"/>
+                    android:gravity="right"
+                    android:text="Like 199"
+                    android:textSize="10sp" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
