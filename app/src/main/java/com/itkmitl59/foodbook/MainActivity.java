@@ -59,37 +59,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initPopularList() {
-        popularList = findViewById(R.id.popular_item_list);
-        popularAdapter = new PoppularRecipeAdapter(this);
 
-        popularList.setHasFixedSize(true);
-        popularList.setAdapter(popularAdapter);
-        popularList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-    }
-
-    private void initSearch() {
-        /*
-        *  Reference : https://stackoverflow.com/questions/6529485/how-to-set-edittext-to-show-search-button-or-enter-button-on-keyboard
-        * */
-        search = findViewById(R.id.search_recipe);
-        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    openIntent(v.getText().toString());
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    private void openIntent(String keyword) {
-        Log.d("Main", keyword);
-        Intent intent = new Intent(this, FoodListActivity.class);
-        intent.putExtra("keyword", keyword);
-        startActivity(intent);
-    }
 }

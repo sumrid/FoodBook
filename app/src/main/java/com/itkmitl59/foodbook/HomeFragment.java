@@ -7,9 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,6 +26,7 @@ import com.itkmitl59.foodbook.foodrecipe.DividerItem;
 import com.itkmitl59.foodbook.foodrecipe.FoodListActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipeAdapter;
+import com.itkmitl59.foodbook.foodrecipe.PoppularRecipeAdapter;
 
 import java.util.ArrayList;
 
@@ -33,6 +38,9 @@ public class HomeFragment extends Fragment {
     private RecyclerView foodList;
     private FoodRecipeAdapter adapter;
     private ArrayList<FoodRecipe> foodRecipes;
+    private EditText search;
+    private RecyclerView popularList;
+    private PoppularRecipeAdapter popularAdapter;
 
 
     @Override
@@ -58,8 +66,11 @@ public class HomeFragment extends Fragment {
         auth.signInWithEmailAndPassword("a@a.com", "12341234");
 
         foodRecipes = new ArrayList<>();
-        initRecyclerView();
         loadDataSetFromFirebase();
+        initRecyclerView();
+
+        initPopularList();
+        initSearch();
 
 
     }
@@ -88,6 +99,40 @@ public class HomeFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     }
                 });
+    }
+
+    private void initPopularList() {
+        popularList = getActivity().findViewById(R.id.popular_item_list);
+        popularAdapter = new PoppularRecipeAdapter(getActivity());
+
+        popularList.setHasFixedSize(true);
+        popularList.setAdapter(popularAdapter);
+        popularList.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+    }
+
+    private void initSearch() {
+        /*
+         *  Reference : https://stackoverflow.com/questions/6529485/how-to-set-edittext-to-show-search-button-or-enter-button-on-keyboard
+         * */
+        search = getActivity().findViewById(R.id.search_recipe);
+        search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    openIntent(v.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void openIntent(String keyword) {
+        Log.d("Main", keyword);
+        Intent intent = new Intent(getActivity(), FoodListActivity.class);
+        intent.putExtra("keyword", keyword);
+        startActivity(intent);
     }
 
 }
