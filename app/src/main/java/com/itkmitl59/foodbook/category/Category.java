@@ -2,9 +2,9 @@ package com.itkmitl59.foodbook.category;
 
 public class Category {
     private String name;
-    private String imageUrl;
+    private int imageUrl;
 
-    public Category(String name, String imageUrl) {
+    public Category(String name, int imageUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
     }
@@ -20,11 +20,11 @@ public class Category {
         this.name = name;
     }
 
-    public String getImageUrl() {
+    public int getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
+    public void setImageUrl(int imageUrl) {
         this.imageUrl = imageUrl;
     }
 }

@@ -1,10 +1,15 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -19,7 +24,7 @@ public class FoodListActivity extends AppCompatActivity {
     private static final String TAG = "Food List Activity";
 
     private RecyclerView foodList;
-    private FoodRecipeAdapter adapter;
+    private FoodListAdapter adapter;
     private ArrayList<FoodRecipe> foodRecipes;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -28,6 +33,15 @@ public class FoodListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_list);
+
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.foodlist_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("เมนูอาหารล่าสุด");
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
+        }
 
         foodRecipes = new ArrayList<>();
         if (getKeyword().isEmpty()) {
@@ -40,8 +54,8 @@ public class FoodListActivity extends AppCompatActivity {
     }
 
     private void initRecyclerView() {
-        foodList = findViewById(R.id.food_list);
-        adapter = new FoodRecipeAdapter(foodRecipes, this);
+        foodList = findViewById(R.id.food_show_list);
+        adapter = new FoodListAdapter(foodRecipes, this);
 
         foodList.setHasFixedSize(true);
         foodList.setAdapter(adapter);

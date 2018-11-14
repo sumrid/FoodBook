@@ -6,8 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itkmitl59.foodbook.R;
+import com.itkmitl59.foodbook.foodrecipe.FoodListAdapter;
+import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +22,29 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private ArrayList<Category> mCategory;
     private Context mContext;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public ImageView cateImage;
+        public TextView cateName;
+        private FoodListAdapter.ClickListener clickListener;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            // ..........
+            cateImage = itemView.findViewById(R.id.category_image_item);
+            cateName = itemView.findViewById(R.id.category_name_item);
+            itemView.setOnClickListener(this);
         }
+
+        public void setOnItemClickListener(FoodListAdapter.ClickListener clickListener) {
+            this.clickListener = clickListener;
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+
     }
-
-
 
 
     public CategoryAdapter(ArrayList<Category> dataSet, Context context) {
@@ -34,7 +54,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // .........
+        final Category category = mCategory.get(position);
+        Picasso.get().load(category.getImageUrl()).fit().centerCrop().into(holder.cateImage);
+        holder.cateName.setText(category.getName());
+
+        holder.setOnItemClickListener(new FoodListAdapter.ClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Toast.makeText(mContext, category.getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @NonNull

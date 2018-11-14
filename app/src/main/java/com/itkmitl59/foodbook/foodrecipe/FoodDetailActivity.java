@@ -1,9 +1,12 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchUIUtil;
 import android.util.Log;
 import android.view.View;
@@ -64,6 +67,12 @@ public class FoodDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_detail);
 
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.food_detail_toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         foodImage = findViewById(R.id.food_detail_image);
         foodName = findViewById(R.id.food_detail_name);
         foodDescription = findViewById(R.id.food_detail_descrip);
@@ -87,6 +96,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         });
 
         getDataFromFirebase();
+        toolbarShowTitle();
 
         likeCount = findViewById(R.id.like_count);
         likeButton = findViewById(R.id.like_button);
@@ -141,13 +151,37 @@ public class FoodDetailActivity extends AppCompatActivity {
                 });
     }
 
+
+    private void toolbarShowTitle(){
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = true;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(foodName.getText());
+                    isShow = true;
+                } else if(isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
     private void setDisplay(FoodRecipe item) {
         Picasso.get().load(item.getMainImageUrl()).fit().centerCrop().into(foodImage);
         foodName.setText(item.getName());
         foodDescription.setText(item.getDescription());
         foodIngredients.setText(item.getIngredients());
         setDisplayHowTo(item.getHowTos());
-        likeCount.setText("ถูกใจ " + item.getLike());
+        likeCount.setText("" + item.getLike());
     }
 
     private void setDisplayHowTo(List<HowTo> howTo) {

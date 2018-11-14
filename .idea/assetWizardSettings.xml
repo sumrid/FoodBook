@@ -19,8 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="D:\AdobeXD Projects\icons\addfood_ico.png" />
-                                      <entry key="outputName" value="addfood_ico" />
+                                      <entry key="imageAsset" value="C:\Users\OPorzii\Desktop\exp\send_ico.png" />
+                                      <entry key="outputName" value="send_ico" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="cfcfcf" />
                                     </map>
                                   </option>
                                 </PersistentState>

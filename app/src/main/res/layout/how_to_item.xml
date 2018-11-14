@@ -10,13 +10,18 @@
         android:id="@+id/how_to_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/notosans_regular"
+        android:layout_marginTop="10dp"
+        android:textColor="#7D97DE"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="24sp" />
+        tools:text="ขั้นตอน 1/5"
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/how_to_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginVertical="10dp"
         android:visibility="gone"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="46dp" />
@@ -25,8 +30,16 @@
         android:id="@+id/how_to_item_descrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/notosans_regular"
+        tools:text="ตั้งกระทะ ใส่ใข่ลงไปทอด"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/divideer_line"/>
 
 
 </LinearLayout>

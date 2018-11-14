@@ -17,4 +17,15 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
+
+
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <style name="profileTabs" parent="TextAppearance.Design.Tab">
+        <item name="android:fontFamily">@font/notosans_regular</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
 </resources>

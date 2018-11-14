@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/food_image_item"
+            android:layout_width="115dp"
+            android:layout_height="90dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/food_name_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/food_image_item"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#535353"
+            tools:text="ผัดกระเพราไก่"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/food_description_item"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/food_name_item"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/food_image_item"
+            android:textColor="#a9a9a9"
+            android:maxLines="2"
+            tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ"
+            android:textSize="12dp" />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@id/food_image_item"
+            android:layout_below="@id/food_description_item"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                tools:text="Like" />
+
+            <TextView
+                android:id="@+id/like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="999" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/comments_ico"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="999" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="8dp"
+                android:text="เข้าชม" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="999" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

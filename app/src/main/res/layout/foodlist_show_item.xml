@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/food_image_item"
+            android:layout_width="150dp"
+            android:layout_height="115dp"
+            android:layout_marginRight="16dp"
+            android:scaleType="centerCrop"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <TextView
+            android:id="@+id/food_name_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/food_image_item"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#535353"
+            tools:text="ผัดกระเพราไก่"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/food_description_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/food_name_item"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@id/food_image_item"
+            android:ellipsize="end"
+            android:textColor="#a9a9a9"
+            android:maxLines="3"
+            tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ"
+            android:textSize="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/food_image_item"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:weightSum="5">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/like_ico"
+                android:layout_marginEnd="4dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="999"
+                android:textColor="#aeaeae"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/food_posttime_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="views 999"
+                android:textColor="#aeaeae"
+                android:textSize="11sp" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|right"
+                android:layout_weight="3">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/person_img" />
+                <TextView
+                    android:id="@+id/food_owner_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="11sp"
+                    android:layout_marginLeft="5dp"
+                    tools:text="DisplayNemeUser"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+</FrameLayout>
+

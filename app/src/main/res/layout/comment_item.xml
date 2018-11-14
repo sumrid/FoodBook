@@ -1,49 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<FrameLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/comment_user_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/person_img" />
 
     <TextView
         android:id="@+id/comment_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/comment_user_image"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/comment_user_image"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="#95A5E6"
+        tools:text="ปอซี่ อิอิ"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/comment_message"
-        android:layout_width="wrap_content"
+        android:layout_width="170dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/comment_user_image"
-        app:layout_constraintTop_toBottomOf="@+id/comment_user_name" />
+        android:layout_below="@id/comment_user_name"
+        android:layout_marginTop="2dp"
+        android:layout_toRightOf="@id/comment_user_image"
+        android:textColor="#a9a9a9"
+        android:maxLines="2"
+        tools:text="ดูน่ากินจังเลยค่ะ"
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/comment_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/comment_user_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentEnd="true"
+        android:textColor="#aeaeae"
+        tools:text="15 Nov 2018"
+        android:textSize="10sp" />
 
-    <ImageView
-        android:id="@+id/comment_user_image"
-        android:src="@drawable/thumb_on"
-        android:layout_width="43dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</android.support.constraint.ConstraintLayout>
+
+
+
+</RelativeLayout>
+
+</FrameLayout>
+
