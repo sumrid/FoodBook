@@ -1,6 +1,7 @@
 package com.itkmitl59.foodbook.profile;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -12,6 +13,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -63,6 +67,13 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         }
 
         return view;
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.profile_menu, menu);
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
@@ -146,6 +157,9 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         switch(item.getItemId()){
             case android.R.id.home:
                 getActivity().onBackPressed();
+                return true;
+            case R.id.edit_menu:
+                startActivity(new Intent(getActivity(), editProfileActivity.class));
                 return true;
         }
         return super.onOptionsItemSelected(item);

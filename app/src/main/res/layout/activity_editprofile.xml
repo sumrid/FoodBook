@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
+        android:translationZ="0.1dp"
+        app:elevation="1dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"></android.support.v7.widget.Toolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/toolbar_shadow" />
+    </android.support.design.widget.AppBarLayout>
+
+
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/appbar"
+        tools:context=".RegisterActivity">
+
+
+        <RelativeLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/person_img" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/img_edit_ico" />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="340dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="ชื่อที่ใช้แสดง"
+                    android:textColor="#BBBABA"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/transparent"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="20dp"
+                    android:text="ปอซี่ อิอิซ่า"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="อีเมล์"
+                    android:textColor="#BBBABA"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/transparent"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="20dp"
+                    android:text="abc@test.com"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="เบอร์โทรศัพท์"
+                    android:textColor="#BBBABA"
+                    android:textSize="18sp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/transparent"
+                    android:fontFamily="sans-serif-light"
+                    android:paddingHorizontal="20dp"
+                    android:text="0812345678"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/notosans_regular"
+                    android:text="รายละเอียดเกี่ยวกับฉัน"
+                    android:textColor="#BBBABA"
+                    android:textSize="18sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@drawable/bg_textbox_comment">
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/transparent"
+                        android:fontFamily="sans-serif-light"
+                        android:inputType="textMultiLine"
+                        android:paddingHorizontal="20dp"
+                        android:text="ปอซี่ อิอิซ่า"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dp"
+                android:background="#58D86E"
+                android:fontFamily="@font/notosans_regular"
+                android:letterSpacing="0.05"
+                android:text="บันทึกข้อมูล"
+                android:textColor="#FFFF"
+                android:textSize="19sp" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

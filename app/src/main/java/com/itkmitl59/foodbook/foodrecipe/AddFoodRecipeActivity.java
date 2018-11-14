@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -55,6 +56,13 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food_recipe);
+
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("เพิ่มเมนูอาหาร");
+        }
 
         foodImage = findViewById(R.id.food_image);
         foodName = findViewById(R.id.food_name);
@@ -285,7 +293,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
                 foodCategory.setText(selected);
             }
         });
-        builder.setNegativeButton("ไม่ชอบซักทีม", null);
+        builder.setNegativeButton("ยกเลิก", null);
         builder.create();
 
         builder.show();

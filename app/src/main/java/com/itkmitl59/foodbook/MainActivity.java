@@ -1,5 +1,6 @@
 package com.itkmitl59.foodbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.itkmitl59.foodbook.category.CategoryFragment;
+import com.itkmitl59.foodbook.foodrecipe.AddFoodRecipeActivity;
 import com.itkmitl59.foodbook.profile.ProfileFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.menu_categoies:
                         showFragment(new CategoryFragment());
+                        return true;
+                    case R.id.menu_addfood:
+                        startActivity(new Intent(getApplicationContext(), AddFoodRecipeActivity.class));
                         return true;
                     case R.id.menu_profile:
                         showFragment(new ProfileFragment());
