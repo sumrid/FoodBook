@@ -2,6 +2,7 @@ package com.itkmitl59.foodbook.foodrecipe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,13 +12,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
+import com.itkmitl59.foodbook.profile.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -31,11 +39,8 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        public ImageView image;
-        public TextView name;
-        public TextView like;
-        public TextView owner;
-        public ImageView profileImage;
+        public ImageView image,profileImage;
+        public TextView name,like,owner;
         private View.OnClickListener listener;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -67,8 +72,8 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
         FoodRecipe item = recipes.get(i);
 
+        setDisplayUser(myViewHolder, item);
         Picasso.get().load(item.getMainImageUrl()).fit().centerCrop().into(myViewHolder.image);
-        Picasso.get().load(item.getMainImageUrl()).fit().centerCrop().into(myViewHolder.profileImage); // TODO : change this
         myViewHolder.name.setText(item.getName());
         myViewHolder.like.setText(item.getLike() + " likes");
         myViewHolder.owner.setText("User");
@@ -112,4 +117,39 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
         intent.putExtra("id", recipe.getUid());
         mContext.startActivity(intent);
     }
+
+
+    private void setDisplayUser(final PoppularRecipeAdapter.MyViewHolder holder, final FoodRecipe item) {
+        FirebaseFirestore store = FirebaseFirestore.getInstance();
+        store.collection("Users")
+                .document(item.getOwner())
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                holder.owner.setText(documentSnapshot.getString("displayName"));
+
+                // get Image Profile from Storage
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference fileUrl = storage.getReference("Users/"+item.getOwner());
+                StorageReference fileRef = fileUrl.child("profile_img.jpg");
+                fileRef.getDownloadUrl()
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.get().load(uri.toString()).fit().centerCrop().into(holder.profileImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
+            }
+
+        });
+
+    }
+
+
 }

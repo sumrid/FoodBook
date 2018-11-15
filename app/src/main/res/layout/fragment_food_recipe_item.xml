@@ -70,7 +70,7 @@
                     android:id="@+id/profile_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/person_img" />
+                    android:src="@drawable/ic_user" />
                 <TextView
                     android:id="@+id/food_owner_item"
                     android:layout_width="wrap_content"

@@ -28,11 +28,20 @@
             android:textSize="22sp" />
 
         <ImageView
+            android:id="@+id/add_img_profile"
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginTop="10dp"
             android:layout_gravity="center_horizontal"
             app:srcCompat="@drawable/add_img_regis" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_profile"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"/>
 
 
         <LinearLayout
@@ -43,60 +52,61 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/inp_displayname"
+                android:id="@+id/layout_displayname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center_horizontal">
 
-
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/inp_displayname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:paddingLeft="10dp"
                     android:hint="ชื่อที่ใช้แสดง"
-                    android:background="@color/transparent"
+                    android:backgroundTint="@color/grey"
                     android:fontFamily="@font/notosans_regular"
                     android:textColor="#000000"
                     android:textSize="18sp" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/grey" />
+
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inp_email"
+                android:id="@+id/layout_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp">
 
-
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/inp_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:paddingLeft="10dp"
                     android:hint="อีเมล์"
-                    android:background="@color/transparent"
+                    android:backgroundTint="@color/grey"
                     android:fontFamily="@font/notosans_regular"
                     android:textColor="#000000"
                     android:textSize="18sp" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/grey" />
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inp_pass"
+                android:id="@+id/layout_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -104,80 +114,81 @@
                 android:layout_marginTop="25dp">
 
 
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/inp_pass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:paddingLeft="10dp"
                     android:hint="รหัสผ่าน"
-                    android:background="@color/transparent"
+                    android:backgroundTint="@color/grey"
                     android:fontFamily="@font/notosans_regular"
                     android:textColor="#000000"
                     android:textSize="18sp" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/grey" />
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inp_repass"
+                android:id="@+id/layout_repass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp">
 
-
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_repass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/inp_repass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:paddingLeft="10dp"
                     android:hint="ยืนยันรหัสผ่าน"
-                    android:background="@color/transparent"
+                    android:backgroundTint="@color/grey"
                     android:fontFamily="@font/notosans_regular"
                     android:textColor="#000000"
                     android:textSize="18sp" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/grey" />
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inp_phone"
+                android:id="@+id/layout_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp">
 
-
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <EditText
+                    android:id="@+id/inp_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:paddingLeft="10dp"
                     android:hint="เบอร์โทรศัพท์"
-                    android:background="@color/transparent"
+                    android:backgroundTint="@color/grey"
                     android:fontFamily="@font/notosans_regular"
                     android:textColor="#000000"
                     android:textSize="18sp" />
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/grey" />
+                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/register_btn"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="58dp"

@@ -36,7 +36,7 @@
 
 
             <LinearLayout
-                android:id="@+id/inp_email"
+                android:id="@+id/layout_email"
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -52,6 +52,7 @@
                     android:text="อีเมล์"
                     android:textSize="14sp" />
                 <EditText
+                    android:id="@+id/inp_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -69,11 +70,11 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/inp_password"
+                android:id="@+id/layout_password"
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_below="@+id/inp_email"
+                android:layout_below="@+id/layout_email"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="25dp">
 
@@ -85,6 +86,7 @@
                     android:text="รหัสผ่าน"
                     android:textSize="14sp" />
                 <EditText
+                    android:id="@+id/inp_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -102,11 +104,11 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btn_login"
                 android:layout_width="320dp"
                 android:layout_height="58dp"
-                android:layout_below="@+id/inp_password"
-                android:layout_alignStart="@+id/inp_email"
+                android:layout_below="@+id/layout_password"
+                android:layout_alignStart="@+id/layout_email"
                 android:layout_marginTop="45dp"
                 android:background="#55AAFF"
                 android:fontFamily="@font/notosans_regular"
@@ -119,7 +121,7 @@
                 android:id="@+id/text_regis"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/button"
+                android:layout_below="@+id/btn_login"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp">
 

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -39,7 +40,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     private static final String TAG = "Add Food Activity";
     private ImageView foodImage;
     private EditText foodName;
-    private EditText foodHowTo;
+    private EditText foodDescription;
     private EditText foodIngredients;
     private EditText foodCategory;
     private Button foodAddButton;
@@ -66,10 +67,10 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
         foodImage = findViewById(R.id.food_image);
         foodName = findViewById(R.id.food_name);
-        foodHowTo = findViewById(R.id.food_how_to);
         foodIngredients = findViewById(R.id.food_ingredients);
         foodAddButton = findViewById(R.id.food_add_button);
         foodCategory = findViewById(R.id.food_category);
+        foodDescription = findViewById(R.id.food_description);
         progressBar = findViewById(R.id.progressBar);
 
         foodCategory.setOnClickListener(new View.OnClickListener() {
@@ -172,8 +173,8 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         foodRecipe.setMainImageUrl(imageUrl);
         foodRecipe.setPostDate(format.format(new Date()));
         foodRecipe.setCategory(foodCategory.getText().toString());
-//        foodRecipe.setOwner();
-//        foodRecipe.setDescription();
+        foodRecipe.setOwner(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        foodRecipe.setDescription(foodDescription.getText().toString());
 
         firestore.collection("FoodRecipes")
                 .document(ducumentName)

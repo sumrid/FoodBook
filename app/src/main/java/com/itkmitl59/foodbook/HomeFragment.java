@@ -27,10 +27,13 @@ import com.itkmitl59.foodbook.foodrecipe.FoodListActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipeAdapter;
 import com.itkmitl59.foodbook.foodrecipe.PoppularRecipeAdapter;
+import com.itkmitl59.foodbook.profile.User;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "Home_Log";
+
     FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
@@ -63,7 +66,7 @@ public class HomeFragment extends Fragment {
         });
 
         // FOR TEST
-        auth.signInWithEmailAndPassword("a@a.com", "12341234");
+//        auth.signInWithEmailAndPassword("a@a.com", "12341234");
 
         foodRecipes = new ArrayList<>();
         loadDataSetFromFirebase();
@@ -77,6 +80,7 @@ public class HomeFragment extends Fragment {
 
     private void initRecyclerView() {
         foodList = getView().findViewById(R.id.food_list);
+
         adapter = new FoodRecipeAdapter(foodRecipes, getActivity());
 
         foodList.setHasFixedSize(true);
