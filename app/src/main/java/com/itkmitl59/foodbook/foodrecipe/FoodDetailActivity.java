@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.itkmitl59.foodbook.Like;
@@ -55,6 +56,8 @@ public class FoodDetailActivity extends AppCompatActivity {
     private Button postComment;
     private LikeButton likeButton;
     private TextView likeCount;
+    private TextView commentCount;
+    private TextView viewCount;
     private CommentAdapter adapter;
 
     private List<Comment> comments;
@@ -78,6 +81,8 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodDescription = findViewById(R.id.food_detail_descrip);
         foodIngredients = findViewById(R.id.food_detail_ingredients);
         howToList = findViewById(R.id.how_to_list);
+        commentCount = findViewById(R.id.comment_count);
+        viewCount = findViewById(R.id.view_count);
 
         comments = new ArrayList<>();
         commentMessage = findViewById(R.id.comment_message_input);
@@ -146,13 +151,14 @@ public class FoodDetailActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             comments.add(document.toObject(Comment.class));
                         }
+                        commentCount.setText("" + comments.size());
                         adapter.notifyDataSetChanged();
                     }
                 });
     }
 
 
-    private void toolbarShowTitle(){
+    private void toolbarShowTitle() {
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -167,7 +173,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                 if (scrollRange + verticalOffset == 0) {
                     collapsingToolbarLayout.setTitle(foodName.getText());
                     isShow = true;
-                } else if(isShow) {
+                } else if (isShow) {
                     collapsingToolbarLayout.setTitle(" ");
                     isShow = false;
                 }
@@ -182,6 +188,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodIngredients.setText(item.getIngredients());
         setDisplayHowTo(item.getHowTos());
         likeCount.setText("" + item.getLike());
+        viewCount.setText("เข้าชม " + item.getViews());
     }
 
     private void setDisplayHowTo(List<HowTo> howTo) {
@@ -212,8 +219,8 @@ public class FoodDetailActivity extends AppCompatActivity {
             comment.setDate(new Date());
             comment.setMessage(message);
             comment.setFoodID(foodID);
-            comment.setUserID("xxxx user xxxx");
-            commentMessage.setText("...");
+            comment.setUserID("xxxx user xxxx"); // TODO : set user id in comment
+            commentMessage.setText("");
             saveComment(comment);
         } else {
             log("message is empty");

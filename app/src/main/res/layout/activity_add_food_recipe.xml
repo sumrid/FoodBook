@@ -222,6 +222,7 @@
                         android:background="@color/transparent"
                         android:fontFamily="sans-serif-light"
                         android:hint="select category"
+                        android:focusable="false"
                         android:paddingStart="10dp"
                         android:textColor="#5c5c5c"
                         android:textSize="18sp" />

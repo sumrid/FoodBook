@@ -44,12 +44,18 @@ public class FoodListActivity extends AppCompatActivity {
         }
 
         foodRecipes = new ArrayList<>();
-        if (getKeyword().isEmpty()) {
+
+        if (getKeyword() == null && getCategory() == null) {
             log("load all recipe");
             loadDataSetFromFirebase();
+        } else if (getCategory() != null) {
+            getDataByCategory(getCategory());
+            if(getSupportActionBar() != null) getSupportActionBar().setTitle("หมวดหมู่ " + getCategory());
         } else {
             getDataByKeyword(getKeyword());
+            if(getSupportActionBar() != null) getSupportActionBar().setTitle("ค้นหา  " +getKeyword());
         }
+
         initRecyclerView();
     }
 
@@ -100,9 +106,31 @@ public class FoodListActivity extends AppCompatActivity {
                 });
     }
 
+    private void getDataByCategory(String category) {
+        firestore.collection("FoodRecipes")
+                .whereEqualTo("category", category)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        foodRecipes.clear();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            FoodRecipe item = document.toObject(FoodRecipe.class);
+                            item.setUid(document.getId());
+                            foodRecipes.add(item);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
     private String getKeyword() {
         String keyword = getIntent().getStringExtra("keyword");
-        log(keyword);
+        if(keyword != null) log(keyword);
         return keyword;
+    }
+
+    private String getCategory() {
+        String category = getIntent().getStringExtra("category");
+        return category;
     }
 }

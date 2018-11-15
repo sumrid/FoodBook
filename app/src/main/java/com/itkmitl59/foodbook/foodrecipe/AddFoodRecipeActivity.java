@@ -182,6 +182,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showLog("Finish Activity");
+                        showToast("บันทึกสำเร็จ");
                         finish();
                     }
                 });

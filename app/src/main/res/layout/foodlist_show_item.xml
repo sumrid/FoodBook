@@ -57,15 +57,18 @@
                 android:layout_height="15dp"
                 android:src="@drawable/like_ico"
                 android:layout_marginEnd="4dp"/>
+
             <TextView
+                android:id="@+id/food_like_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="999"
                 android:textColor="#aeaeae"
                 android:textSize="11sp" />
+
             <TextView
-                android:id="@+id/food_posttime_item"
+                android:id="@+id/food_view_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

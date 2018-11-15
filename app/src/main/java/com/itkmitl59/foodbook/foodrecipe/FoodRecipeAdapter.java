@@ -11,8 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.itkmitl59.foodbook.R;
 import com.squareup.picasso.Picasso;
+
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Hours;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +32,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView foodImage;
-        public TextView foodName, foodDescription,foodOwner, viewCount;
+        public TextView foodName, foodDescription,foodOwner, viewCount, postTime;
         private ClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -36,6 +43,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
             foodDescription = itemView.findViewById(R.id.food_description_item);
             foodOwner = itemView.findViewById(R.id.food_owner_item);
             viewCount = itemView.findViewById(R.id.food_viewcount_item);
+            postTime = itemView.findViewById(R.id.food_posttime_item);
             itemView.setOnClickListener(this);
 
         }
@@ -74,7 +82,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         if(!foodRecipe.getPostDate().isEmpty()){
             try {
                 Date date = format.parse(foodRecipe.getPostDate());
-                Log.d("Adapter", date.toString());
+                holder.postTime.setText(calculateTime(date));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -106,5 +114,34 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         Intent intent = new Intent(mContext, FoodDetailActivity.class);
         intent.putExtra("id", foodID);
         mContext.startActivity(intent);
+    }
+
+    private String calculateTime(Date date) {
+        Date currentTime = new Date();
+        DateTime d1 = new DateTime(currentTime);
+        DateTime d2 = new DateTime(date);
+
+        int hour = Hours.hoursBetween(d2,d1).getHours();
+        int day = Days.daysBetween(d2,d1).getDays();
+        Log.d("Adapter", hour+" hours diff" + "days diff " + day);
+
+        if(hour > 24) {
+            return day + "วันที่แล้ว";
+        } else {
+            return hour + "ชั่วโมงที่แล้ว";
+        }
+    }
+
+    private void setDisplayUser(final ViewHolder holder, FoodRecipe item) {
+        FirebaseFirestore store = FirebaseFirestore.getInstance();
+        store.collection("users")
+                .document(item.getOwner())
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                holder.foodOwner.setText("set text");
+            }
+        });
+
     }
 }

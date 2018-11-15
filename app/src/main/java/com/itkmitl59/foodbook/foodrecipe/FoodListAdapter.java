@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.itkmitl59.foodbook.R;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHolder>  {
@@ -22,6 +24,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView foodImage;
         public TextView foodName, foodDescription,foodOwner;
+        public TextView likeCount, viewCount;
         private ClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -31,6 +34,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
             foodName = itemView.findViewById(R.id.food_name_item);
             foodDescription = itemView.findViewById(R.id.food_description_item);
             foodOwner = itemView.findViewById(R.id.food_owner_item);
+            likeCount = itemView.findViewById(R.id.food_like_item);
+            viewCount = itemView.findViewById(R.id.food_view_item);
             itemView.setOnClickListener(this);
 
         }
@@ -63,6 +68,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListAdapter.ViewHo
         holder.foodName.setText(foodRecipe.getName());
         holder.foodDescription.setText(foodRecipe.getDescription());
         holder.foodOwner.setText("DisplayName");
+        holder.viewCount.setText("views " + foodRecipe.getViews());
+        holder.likeCount.setText("" + foodRecipe.getLike());
 
         holder.setOnItemClickListener(new ClickListener() {
             @Override

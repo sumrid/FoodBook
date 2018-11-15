@@ -75,10 +75,11 @@
                 android:src="@drawable/comments_ico"/>
 
             <TextView
+                android:id="@+id/comment_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="999" />
+                android:text="999"
+                android:textSize="12sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -87,11 +88,13 @@
                 android:layout_marginEnd="8dp"
                 android:textSize="12sp"
                 android:text="เข้าชม" />
+
             <TextView
+                android:id="@+id/view_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="999" />
+                android:text="999"
+                android:textSize="12sp" />
         </LinearLayout>
 
     </RelativeLayout>

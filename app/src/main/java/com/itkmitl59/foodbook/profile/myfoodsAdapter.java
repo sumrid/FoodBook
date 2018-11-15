@@ -7,15 +7,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.itkmitl59.foodbook.R;
+import com.itkmitl59.foodbook.comment.Comment;
 import com.itkmitl59.foodbook.foodrecipe.FoodDetailActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
 
 public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHolder>  {
     private ArrayList<FoodRecipe> mFoodRecipes;
@@ -24,6 +34,7 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView foodImage;
         public TextView foodName, foodDescription;
+        public TextView likeCount, commentCount, viewCount;
         private ClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -32,6 +43,9 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
             foodImage = itemView.findViewById(R.id.food_image_item);
             foodName = itemView.findViewById(R.id.food_name_item);
             foodDescription = itemView.findViewById(R.id.food_description_item);
+            likeCount = itemView.findViewById(R.id.like_count);
+            commentCount = itemView.findViewById(R.id.comment_count);
+            viewCount = itemView.findViewById(R.id.view_count);
             itemView.setOnClickListener(this);
 
         }
@@ -63,6 +77,9 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
         Picasso.get().load(foodRecipe.getMainImageUrl()).fit().centerCrop().into(holder.foodImage);
         holder.foodName.setText(foodRecipe.getName());
         holder.foodDescription.setText(foodRecipe.getDescription());
+        holder.viewCount.setText("" + foodRecipe.getViews());
+        holder.likeCount.setText("" + foodRecipe.getLike());
+        getCommentCount(holder.commentCount, foodRecipe.getUid());
 
         holder.setOnItemClickListener(new ClickListener() {
             @Override
@@ -90,5 +107,18 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
         Intent intent = new Intent(mContext, FoodDetailActivity.class);
         intent.putExtra("id", foodID);
         mContext.startActivity(intent);
+    }
+
+    private void getCommentCount(final TextView editText, String foodID){
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        firestore.collection("comments")
+                .whereEqualTo("foodID", foodID)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        int count = queryDocumentSnapshots.size();
+                        editText.setText("" + count);
+                    }
+                });
     }
 }
