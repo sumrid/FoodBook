@@ -10,12 +10,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -39,13 +42,14 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     private static final String TAG = "Add Food Activity";
     private ImageView foodImage;
     private EditText foodName;
-    private EditText foodHowTo;
     private EditText foodIngredients;
     private EditText foodCategory;
+    private EditText foodDescription;
     private Button foodAddButton;
     private ProgressBar progressBar;
     private Uri imageUri;
 
+    private FoodRecipe mFoodRecipe;
     static List<HowTo> howTo = new ArrayList<>();
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -66,10 +70,10 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
         foodImage = findViewById(R.id.food_image);
         foodName = findViewById(R.id.food_name);
-        foodHowTo = findViewById(R.id.food_how_to);
         foodIngredients = findViewById(R.id.food_ingredients);
         foodAddButton = findViewById(R.id.food_add_button);
         foodCategory = findViewById(R.id.food_category);
+        foodDescription = findViewById(R.id.food_description);
         progressBar = findViewById(R.id.progressBar);
 
         foodCategory.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +110,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         });
 
         setDisplayHowTo(howTo);
+        loadLocalData();
     }
 
 
@@ -173,7 +178,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         foodRecipe.setPostDate(format.format(new Date()));
         foodRecipe.setCategory(foodCategory.getText().toString());
 //        foodRecipe.setOwner();
-//        foodRecipe.setDescription();
+        foodRecipe.setDescription(foodDescription.getText().toString());
 
         firestore.collection("FoodRecipes")
                 .document(ducumentName)
@@ -230,26 +235,6 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     }
 
     private void addHowTo() {
-        // TODO : make it complete
-
-//        LinearLayout layout = findViewById(R.id.add_food);
-//
-//        // add view
-//        EditText text = new EditText(this);
-//        text.setText("+ ");
-//        text.setTag("how_to");
-//        layout.addView(text, insert_index);
-//
-//        ImageView howtoImage = new ImageView(this);
-//        howtoImage.setTag("how_to_image");
-//        howtoImage.setImageResource(R.drawable.select_image);
-//        howtoImage.setMaxHeight(50);
-//        layout.addView(howtoImage, insert_index+1);
-//        insert_index+=2;
-
-        // add layout
-//        View.inflate(this, R.layout.how_to_input, layout);
-
         Intent intent = new Intent(this, AddHowToActivity.class);
         startActivity(intent);
     }
@@ -298,5 +283,73 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         builder.create();
 
         builder.show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            showSaveDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showSaveDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("ต้องการบันทึกไว้ก่อนหรือไม่ ?");
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+        builder.setPositiveButton("บันทึก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                localSave();
+                showToast("บันทึกเรียบร้อย");
+                finish();
+            }
+        });
+        builder.setNegativeButton("ไม่บันทึก", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        builder.create().show();
+    }
+
+    private void localSave() {
+        if(Hawk.isBuilt() == false) Hawk.init(this).build();
+
+        List<FoodRecipe> foodRecipes = new ArrayList<>();
+
+        if(Hawk.get("recipe") != null) {
+            ArrayList<FoodRecipe> dataSet = Hawk.get("recipe");
+            foodRecipes.addAll(dataSet);
+        }
+
+        FoodRecipe item = new FoodRecipe();
+        item.setUid(foodRecipes.size()+"");
+        item.setMainImageUrl(imageUri.toString());
+        item.setName(foodName.getText().toString());
+        item.setDescription(foodDescription.getText().toString());
+        item.setIngredients(foodIngredients.getText().toString());
+        item.setHowTos(howTo);
+        item.setCategory(foodCategory.getText().toString());
+
+        foodRecipes.add(item);
+        Hawk.put("recipe", foodRecipes);
+    }
+
+    private void loadLocalData() {
+        FoodRecipe item = (FoodRecipe) getIntent().getSerializableExtra("recipe");
+        if(item != null) {
+            foodName.setText(item.getName());
+            foodDescription.setText(item.getDescription());
+            foodIngredients.setText(item.getIngredients());
+            setDisplayHowTo(item.getHowTos());
+            foodCategory.setText(item.getCategory());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        showSaveDialog();
     }
 }

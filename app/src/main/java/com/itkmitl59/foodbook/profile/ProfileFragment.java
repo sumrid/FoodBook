@@ -103,10 +103,14 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
     private void setupViewPager(ViewPager viewPager) {
 
+        myfoodsPage page2 = new myfoodsPage();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("localSave", true);
+        page2.setArguments(bundle);
 
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new myfoodsPage(), "เมนูอาหารที่เขียน");
-        adapter.addFragment(new myfoodsPage(), "ที่บันทึกไว้");
+        adapter.addFragment(page2, "ที่บันทึกไว้");
         viewPager.setAdapter(adapter);
 
 

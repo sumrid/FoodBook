@@ -1,9 +1,10 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodRecipe {
+public class FoodRecipe implements Serializable {
     private String uid;
     private String name;
     private String description;

@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.comment.Comment;
+import com.itkmitl59.foodbook.foodrecipe.AddFoodRecipeActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodDetailActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.squareup.picasso.Picasso;
@@ -84,7 +85,8 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
         holder.setOnItemClickListener(new ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                startIntent(foodRecipe.getUid());
+                if(foodRecipe.getUid().length() < 5) startEditIntent(position);
+                else startIntent(foodRecipe.getUid());
             }
         });
     }
@@ -120,5 +122,11 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
                         editText.setText("" + count);
                     }
                 });
+    }
+
+    private void startEditIntent(int position) {
+        Intent intent = new Intent(mContext, AddFoodRecipeActivity.class);
+        intent.putExtra("recipe", mFoodRecipes.get(position));
+        mContext.startActivity(intent);
     }
 }

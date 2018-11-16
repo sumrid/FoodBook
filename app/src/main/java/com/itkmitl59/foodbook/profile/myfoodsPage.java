@@ -17,6 +17,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.foodrecipe.DividerItem;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
+import com.orhanobut.hawk.Hawk;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class myfoodsPage extends Fragment {
     private RecyclerView myfoodList;
     private myfoodsAdapter adapter;
     private ArrayList<FoodRecipe> foodRecipes;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,9 +43,12 @@ public class myfoodsPage extends Fragment {
 
         foodRecipes = new ArrayList<>();
         initRecyclerView();
-        loadDataSetFromFirebase();
+        if (isHaveBundle()) {
+            getLocalData();
+        } else {
+            loadDataSetFromFirebase();
+        }
     }
-
 
 
     private void initRecyclerView() {
@@ -72,6 +77,23 @@ public class myfoodsPage extends Fragment {
                 });
     }
 
+    private boolean isHaveBundle() {
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
+    private void getLocalData() {
+        if(Hawk.isBuilt() == false) Hawk.init(getContext()).build();
 
+        if(Hawk.get("recipe") != null) {
+            ArrayList<FoodRecipe> dataSet = Hawk.get("recipe");
+            foodRecipes.clear();
+            foodRecipes.addAll(dataSet);
+            adapter.notifyDataSetChanged();
+        }
+    }
 }
