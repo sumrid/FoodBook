@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.itkmitl59.foodbook.R;
@@ -70,6 +71,7 @@ public class FoodListActivity extends AppCompatActivity {
 
     private void loadDataSetFromFirebase() {
         firestore.collection("FoodRecipes")
+                .orderBy("uid", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -90,6 +92,7 @@ public class FoodListActivity extends AppCompatActivity {
 
     private void getDataByKeyword(final String keyword) {
         firestore.collection("FoodRecipes")
+                .orderBy("uid", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {

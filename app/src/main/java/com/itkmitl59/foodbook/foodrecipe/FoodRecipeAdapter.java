@@ -134,9 +134,9 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         Log.d("Adapter", hour+" hours diff" + "days diff " + day);
 
         if(hour > 24) {
-            return day + "วันที่แล้ว";
+            return day + " วันที่แล้ว";
         } else {
-            return hour + "ชั่วโมงที่แล้ว";
+            return hour + " ชั่วโมงที่แล้ว";
         }
     }
 

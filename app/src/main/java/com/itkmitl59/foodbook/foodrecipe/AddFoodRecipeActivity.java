@@ -202,7 +202,8 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     private void openSelectImageWindow() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, 1);
     }
 
@@ -213,7 +214,13 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             Picasso.get().load(imageUri).into(foodImage);
-            showLog(data.getType()+"");
+            showLog(data.getData().getScheme()+" type");
+
+            final int takeFlags = getIntent().getFlags()
+                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+            getContentResolver().takePersistableUriPermission(imageUri, takeFlags);
         }
     }
 
