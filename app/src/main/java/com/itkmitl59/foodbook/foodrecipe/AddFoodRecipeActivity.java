@@ -3,6 +3,7 @@ package com.itkmitl59.foodbook.foodrecipe;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -51,7 +52,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     private Uri imageUri;
 
     private FoodRecipe mFoodRecipe;
-    static List<HowTo> howTo = new ArrayList<>();
+    static List<HowTo> howTo;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -64,10 +65,12 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("เพิ่มเมนูอาหาร");
         }
+
+        howTo = new ArrayList<>();
 
         foodImage = findViewById(R.id.food_image);
         foodName = findViewById(R.id.food_name);
@@ -96,9 +99,6 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
                 setLoading(true);
                 showLog("Click add button");
                 uploadImage();
-
-                // TODO : this for test
-//                saveFoodRecipe("http://static.asiawebdirect.com/m/.imaging/678x452/website/bangkok/portals/bangkok-com/homepage/food-top10/allParagraphs/01/top10Set/0/image.jpg");
             }
         });
 
@@ -110,7 +110,6 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
             }
         });
 
-        setDisplayHowTo(howTo);
         loadLocalData();
     }
 
@@ -213,7 +212,8 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            Picasso.get().load(data.getData()).into(foodImage);
+            Picasso.get().load(imageUri).into(foodImage);
+            mFoodRecipe.setMainImageUrl(imageUri.toString());
         }
     }
 
@@ -241,8 +241,11 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     }
 
     private void setDisplayHowTo(List<HowTo> howTo) {
+        showLog("method setDisplayHowTo");
+
         LinearLayout howToList = findViewById(R.id.how_to_list);
         howToList.removeAllViews();
+
         for (HowTo item : howTo) {
             View view = getLayoutInflater().inflate(R.layout.how_to_item, null);
 
@@ -268,7 +271,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     private void showDialogSelect() {
         // TODO : It's not complete
-        final String category[] = {"ผัด", "ทอด","นึ่ง", "ยำ"};
+        final String category[] = {"ผัด", "ทอด", "นึ่ง", "ยำ"};
 
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
@@ -316,36 +319,67 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     }
 
     private void localSave() {
-        if(Hawk.isBuilt() == false) Hawk.init(this).build();
+        if (Hawk.isBuilt() == false) Hawk.init(this).build();
+        boolean saved = false;
 
         List<FoodRecipe> foodRecipes = new ArrayList<>();
 
-        if(Hawk.get("recipe") != null) {
+        // get data
+        if (Hawk.get("recipe") != null) {
             ArrayList<FoodRecipe> dataSet = Hawk.get("recipe");
             foodRecipes.addAll(dataSet);
         }
 
-        FoodRecipe item = new FoodRecipe();
-        item.setUid(foodRecipes.size()+"");
-        item.setMainImageUrl(imageUri.toString());
-        item.setName(foodName.getText().toString());
-        item.setDescription(foodDescription.getText().toString());
-        item.setIngredients(foodIngredients.getText().toString());
-        item.setHowTos(howTo);
-        item.setCategory(foodCategory.getText().toString());
+        // check if already saved
+        if (mFoodRecipe != null) {
+            for (FoodRecipe item : foodRecipes) {
+                if (item.getUid().equals(mFoodRecipe.getUid())) saved = true;
+            }
+        } else {
+            mFoodRecipe = new FoodRecipe();
+        }
 
-        foodRecipes.add(item);
+        if (!saved) { // if it first save..  then set ID for save. (int index)
+            mFoodRecipe.setUid(foodRecipes.size() + "");
+        }
+        mFoodRecipe.setName(foodName.getText().toString());
+        mFoodRecipe.setDescription(foodDescription.getText().toString());
+        mFoodRecipe.setIngredients(foodIngredients.getText().toString());
+        mFoodRecipe.setHowTos(howTo);
+        mFoodRecipe.setCategory(foodCategory.getText().toString());
+        showLog("save " + howTo);
+
+        // update
+        if (saved) {
+            int index = Integer.parseInt(mFoodRecipe.getUid());
+            foodRecipes.set(index, mFoodRecipe);
+        } else {
+            foodRecipes.add(mFoodRecipe);
+        }
+
+        // save
         Hawk.put("recipe", foodRecipes);
     }
 
     private void loadLocalData() {
-        FoodRecipe item = (FoodRecipe) getIntent().getSerializableExtra("recipe");
-        if(item != null) {
-            foodName.setText(item.getName());
-            foodDescription.setText(item.getDescription());
-            foodIngredients.setText(item.getIngredients());
-            setDisplayHowTo(item.getHowTos());
-            foodCategory.setText(item.getCategory());
+        mFoodRecipe = (FoodRecipe) getIntent().getSerializableExtra("recipe");
+
+        if (mFoodRecipe != null) {
+            showLog("local id " + mFoodRecipe.getUid());
+            showLog("local url " + mFoodRecipe.getMainImageUrl());
+            showLog("local howto " + mFoodRecipe.getHowTos());
+
+            if (mFoodRecipe.getMainImageUrl() != null) {
+                Uri uri = Uri.parse(mFoodRecipe.getMainImageUrl());
+                Picasso.get().load(uri).into(foodImage);
+                Picasso.get().load(mFoodRecipe.getMainImageUrl()).fit().centerCrop().into(foodImage);
+            }
+            foodName.setText(mFoodRecipe.getName());
+            foodDescription.setText(mFoodRecipe.getDescription());
+            foodIngredients.setText(mFoodRecipe.getIngredients());
+            foodCategory.setText(mFoodRecipe.getCategory());
+            howTo.addAll(mFoodRecipe.getHowTos());
+            setDisplayHowTo(howTo);
         }
     }
 

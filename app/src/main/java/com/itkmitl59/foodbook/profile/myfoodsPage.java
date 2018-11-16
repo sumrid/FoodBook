@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 public class myfoodsPage extends Fragment {
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
     private RecyclerView myfoodList;
     private myfoodsAdapter adapter;
@@ -63,6 +65,7 @@ public class myfoodsPage extends Fragment {
 
     private void loadDataSetFromFirebase() {
         firestore.collection("FoodRecipes")
+                .whereEqualTo("owner", auth.getCurrentUser().getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -94,6 +97,16 @@ public class myfoodsPage extends Fragment {
             foodRecipes.clear();
             foodRecipes.addAll(dataSet);
             adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isHaveBundle()) {
+            getLocalData();
+        } else {
+            loadDataSetFromFirebase();
         }
     }
 }

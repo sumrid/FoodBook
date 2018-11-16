@@ -1,6 +1,8 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
-public class HowTo {
+import java.io.Serializable;
+
+public class HowTo implements Serializable {
     private String description;
     private String imageUrl;
 
