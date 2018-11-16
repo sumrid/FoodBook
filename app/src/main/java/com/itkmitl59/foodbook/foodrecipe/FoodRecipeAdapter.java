@@ -2,6 +2,7 @@ package com.itkmitl59.foodbook.foodrecipe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,10 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.R;
+import com.itkmitl59.foodbook.profile.User;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
@@ -31,7 +38,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
     private Context mContext;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public ImageView foodImage;
+        public ImageView foodImage,ownerImage;
         public TextView foodName, foodDescription,foodOwner, viewCount, postTime;
         private ClickListener clickListener;
 
@@ -39,6 +46,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
             super(itemView);
 
             foodImage = itemView.findViewById(R.id.food_image_item);
+            ownerImage = itemView.findViewById(R.id.profile_image);
             foodName = itemView.findViewById(R.id.food_name_item);
             foodDescription = itemView.findViewById(R.id.food_description_item);
             foodOwner = itemView.findViewById(R.id.food_owner_item);
@@ -72,10 +80,10 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         final FoodRecipe foodRecipe = mFoodRecipes.get(position);
+        setDisplayUser(holder,foodRecipe);
         Picasso.get().load(foodRecipe.getMainImageUrl()).fit().centerCrop().into(holder.foodImage);
         holder.foodName.setText(foodRecipe.getName());
         holder.foodDescription.setText(foodRecipe.getDescription());
-        holder.foodOwner.setText("DisplayName");
         holder.viewCount.setText("views " + foodRecipe.getViews());
 
         SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy - HH:mm");
@@ -132,16 +140,38 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         }
     }
 
-    private void setDisplayUser(final ViewHolder holder, FoodRecipe item) {
+    private void setDisplayUser(final ViewHolder holder, final FoodRecipe item) {
         FirebaseFirestore store = FirebaseFirestore.getInstance();
-        store.collection("users")
+        store.collection("Users")
                 .document(item.getOwner())
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                holder.foodOwner.setText("set text");
+                holder.foodOwner.setText(documentSnapshot.getString("displayName"));
+
+            // get Image Profile from Storage
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference fileUrl = storage.getReference("Users/"+item.getOwner());
+                StorageReference fileRef = fileUrl.child("profile_img.jpg");
+                fileRef.getDownloadUrl()
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Picasso.get().load(uri.toString()).fit().centerCrop().into(holder.ownerImage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+
             }
+
         });
 
     }
+
+
+
 }

@@ -2,7 +2,9 @@ package com.itkmitl59.foodbook.profile;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,26 +22,41 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
+import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetChangedListener {
+    private static final String TAG = "Profile_log";
 
     private static final int PERCENTAGE_TO_ANIMATE_AVATAR = 20;
     private boolean mIsAvatarShown = true;
     private ImageView mProfileImage;
     private int mMaxScrollSize;
-
+    private TextView displayName,aboutText;
+    private User curUser;
+    private String userImgUrl;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +76,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+
+
         appbarLayout.addOnOffsetChangedListener(this);
         mMaxScrollSize = appbarLayout.getTotalScrollRange();
 
@@ -66,8 +86,22 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
+
+        curUser = ((MainActivity)getActivity()).getCurrentUser();
+        userImgUrl = ((MainActivity)getActivity()).getUserImgUrl();
+        Log.d(TAG, curUser.getDisplayName());
+
+
+        displayName = (TextView) view.findViewById(R.id.displayname_text);
+        aboutText = (TextView) view.findViewById(R.id.about_text);
+        displayName.setText(curUser.getDisplayName());
+        aboutText.setText(curUser.getAboutme());
+
+        if(userImgUrl!=null) Picasso.get().load(userImgUrl).fit().centerCrop().into(mProfileImage);
+
         return view;
     }
+
 
 
     @Override
@@ -160,7 +194,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case android.R.id.home:
-                getActivity().onBackPressed();
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
                 return true;
             case R.id.edit_menu:
                 startActivity(new Intent(getActivity(), editProfileActivity.class));
