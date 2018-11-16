@@ -20,11 +20,12 @@
         </activity>
         <activity android:name=".foodrecipe.AddFoodRecipeActivity" />
         <!--<activity android:name=".LoginActivity" />-->
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".RegisterActivity" android:theme="@style/AppTheme.TransparentTheme" />
+        <activity android:name=".MainActivity" android:theme="@style/AppTheme.TransparentTheme"/>
         <activity android:name=".profile.editProfileActivity"/>
         <activity android:name=".foodrecipe.FoodDetailActivity" />
         <activity android:name=".foodrecipe.FoodListActivity"/>
+        <activity android:name=".profile.viewProfileActivity"/>
         <activity android:name=".foodrecipe.AddHowToActivity"></activity>
     </application>
 

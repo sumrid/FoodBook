@@ -3,6 +3,7 @@ package com.itkmitl59.foodbook.foodrecipe;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,10 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,7 +30,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
+import com.itkmitl59.foodbook.profile.ProfileFragment;
 import com.itkmitl59.foodbook.profile.User;
+import com.itkmitl59.foodbook.profile.editProfileActivity;
+import com.itkmitl59.foodbook.profile.viewProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,12 +43,13 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
 
     private Context mContext;
     private List<FoodRecipe> recipes = new ArrayList<>();
-
+    private User userLink;
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         public ImageView image,profileImage;
         public TextView name,like,owner;
+        public LinearLayout linkProfile;
         private View.OnClickListener listener;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -51,6 +60,7 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
             like = itemView.findViewById(R.id.popular_like);
             owner = itemView.findViewById(R.id.popular_owner_item);
             profileImage = itemView.findViewById(R.id.profile_image);
+            linkProfile = itemView.findViewById(R.id.link_profile);
         }
     }
 
@@ -70,13 +80,20 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, final int i) {
-        FoodRecipe item = recipes.get(i);
+        final FoodRecipe item = recipes.get(i);
 
         setDisplayUser(myViewHolder, item);
         Picasso.get().load(item.getMainImageUrl()).fit().centerCrop().into(myViewHolder.image);
         myViewHolder.name.setText(item.getName());
         myViewHolder.like.setText(item.getLike() + " likes");
         myViewHolder.owner.setText("User");
+
+        myViewHolder.linkProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewUserData(item.getOwner());
+            }
+        });
 
         myViewHolder.image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +166,30 @@ public class PoppularRecipeAdapter extends RecyclerView.Adapter<PoppularRecipeAd
 
         });
 
+    }
+
+    private void viewUserData(final String userUid){
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        mFirestore.collection("Users").document(userUid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    userLink = new User(documentSnapshot.getString("displayName"),
+                            mAuth.getCurrentUser().getEmail(),
+                            documentSnapshot.getString("phone"),
+                            documentSnapshot.getString("aboutme"));
+
+                    Intent intent = new Intent(mContext, viewProfileActivity.class);
+                    intent.putExtra("curUser", userLink);
+                    intent.putExtra("viewUid", userUid);
+                    mContext.startActivity(intent);
+                }
+            }
+        });
     }
 
 

@@ -1,20 +1,18 @@
 package com.itkmitl59.foodbook;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,10 +48,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
+
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         setContentView(R.layout.activity_register);
 
@@ -64,6 +62,9 @@ public class RegisterActivity extends AppCompatActivity {
         passwordReg = (EditText) findViewById(R.id.inp_pass);
         repasswordReg = (EditText) findViewById(R.id.inp_repass);
         phoneReg = (EditText) findViewById(R.id.inp_phone);
+
+        passwordReg.setTransformationMethod(new PasswordTransformationMethod());
+        repasswordReg.setTransformationMethod(new PasswordTransformationMethod());
 
         addImgProfile = (ImageView) findViewById(R.id.add_img_profile);
         imgProfile = (ImageView) findViewById(R.id.img_profile);
@@ -112,6 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
     }
+
 
     private void createAccount(final User user, String password) {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {

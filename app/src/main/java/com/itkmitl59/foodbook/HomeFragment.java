@@ -81,11 +81,13 @@ public class HomeFragment extends Fragment {
 
     private void initRecyclerView() {
         foodList = getView().findViewById(R.id.food_list);
+        foodList.setNestedScrollingEnabled(false);
 
         adapter = new FoodRecipeAdapter(foodRecipes, getActivity());
 
         foodList.setHasFixedSize(true);
         foodList.setAdapter(adapter);
+
         foodList.setLayoutManager(new LinearLayoutManager(getActivity()));
         foodList.addItemDecoration(new DividerItem(getActivity(), LinearLayoutManager.VERTICAL, 15));
     }

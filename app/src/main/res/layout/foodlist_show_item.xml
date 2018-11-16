@@ -9,12 +9,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="10dp">
 
         <ImageView
             android:id="@+id/food_image_item"
-            android:layout_width="150dp"
-            android:layout_height="115dp"
+            android:layout_width="140dp"
+            android:layout_height="100dp"
             android:layout_marginRight="16dp"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -51,48 +52,57 @@
             android:layout_toRightOf="@id/food_image_item"
             android:layout_alignParentBottom="true"
             android:gravity="center_vertical"
-            android:weightSum="5">
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/like_ico"
-                android:layout_marginEnd="4dp"/>
+            android:weightSum="1">
 
-            <TextView
-                android:id="@+id/food_like_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="999"
-                android:textColor="#aeaeae"
-                android:textSize="11sp" />
-
-            <TextView
-                android:id="@+id/food_view_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="views 999"
-                android:textColor="#aeaeae"
-                android:textSize="11sp" />
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/link_profile"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical|right"
-                android:layout_weight="3">
+                android:gravity="center_vertical|left"
+                android:layout_weight="0.4">
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/person_img" />
+                    android:src="@drawable/ic_user" />
                 <TextView
                     android:id="@+id/food_owner_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="11sp"
                     android:layout_marginLeft="5dp"
-                    tools:text="DisplayNemeUser"
+                    tools:text="displayname"
                     />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|right"
+                android:layout_weight="0.6">
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/like_ico"
+                    android:layout_marginEnd="4dp"/>
+
+                <TextView
+                    android:id="@+id/food_like_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="999"
+                    android:textColor="#aeaeae"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/food_view_item"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="views 999"
+                    android:textColor="#aeaeae"
+                    android:textSize="11sp" />
+
             </LinearLayout>
 
 

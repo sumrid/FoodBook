@@ -1,15 +1,24 @@
 package com.itkmitl59.foodbook;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,6 +37,9 @@ import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_log";
+    private boolean doubleBackToExitPressedOnce = false;
+
+
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -44,16 +56,22 @@ public class MainActivity extends AppCompatActivity {
     private String userImgUrl;
 
 
+    public void changeStatusBarColor(String color){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(Color.parseColor(color));
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-//                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-//
-//        }
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
 
 
 
@@ -71,6 +89,40 @@ public class MainActivity extends AppCompatActivity {
         initBottomNavbar();
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG,"RESUMMM");
+
+        super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_view);
+        if(f instanceof HomeFragment) {
+            if (doubleBackToExitPressedOnce) {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("EXIT", true);
+                startActivity(intent);
+                return;
+            }
+            this.doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "กดอีกครั้งเพื่อออก", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            }, 2000);
+
+        } else {
+            super.onBackPressed();
+        }
     }
 
 
@@ -98,7 +150,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         userImgUrl = uri.toString();
-                        Log.d(TAG,uri.toString());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -136,10 +187,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showFragment(Fragment fragment){
+    public void showFragment(Fragment fragment){
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_view, fragment)
+                .addToBackStack(null)
                 .commit();
 
     }

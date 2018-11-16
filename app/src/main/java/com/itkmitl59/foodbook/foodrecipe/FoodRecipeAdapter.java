@@ -3,6 +3,7 @@ package com.itkmitl59.foodbook.foodrecipe;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,18 +11,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
+import com.itkmitl59.foodbook.profile.ProfileFragment;
 import com.itkmitl59.foodbook.profile.User;
+import com.itkmitl59.foodbook.profile.viewProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
@@ -36,11 +42,14 @@ import java.util.Date;
 public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.ViewHolder>  {
     private ArrayList<FoodRecipe> mFoodRecipes;
     private Context mContext;
+    private User userLink;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView foodImage,ownerImage;
         public TextView foodName, foodDescription,foodOwner, viewCount, postTime;
+        public LinearLayout linkProfile;
         private ClickListener clickListener;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -52,6 +61,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
             foodOwner = itemView.findViewById(R.id.food_owner_item);
             viewCount = itemView.findViewById(R.id.food_viewcount_item);
             postTime = itemView.findViewById(R.id.food_posttime_item);
+            linkProfile = itemView.findViewById(R.id.link_profile);
             itemView.setOnClickListener(this);
 
         }
@@ -85,6 +95,12 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         holder.foodName.setText(foodRecipe.getName());
         holder.foodDescription.setText(foodRecipe.getDescription());
         holder.viewCount.setText("views " + foodRecipe.getViews());
+        holder.linkProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewUserData(foodRecipe.getOwner());
+            }
+        });
 
         SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy - HH:mm");
         if(!foodRecipe.getPostDate().isEmpty()){
@@ -171,6 +187,31 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
         });
 
     }
+
+    private void viewUserData(final String userUid){
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        mFirestore.collection("Users").document(userUid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    userLink = new User(documentSnapshot.getString("displayName"),
+                            mAuth.getCurrentUser().getEmail(),
+                            documentSnapshot.getString("phone"),
+                            documentSnapshot.getString("aboutme"));
+
+                    Intent intent = new Intent(mContext, viewProfileActivity.class);
+                    intent.putExtra("curUser", userLink);
+                    intent.putExtra("viewUid", userUid);
+                    mContext.startActivity(intent);
+                }
+            }
+        });
+    }
+
 
 
 

@@ -12,6 +12,8 @@
 
         <RelativeLayout
             android:id="@+id/header_layout"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:layout_width="match_parent"
             android:layout_height="190dp"
             android:background="@drawable/main_head_bg">

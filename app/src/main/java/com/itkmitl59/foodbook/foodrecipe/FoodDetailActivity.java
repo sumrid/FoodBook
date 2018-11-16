@@ -1,6 +1,9 @@
 package com.itkmitl59.foodbook.foodrecipe;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +20,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -26,10 +32,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.Like;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.comment.Comment;
 import com.itkmitl59.foodbook.comment.CommentAdapter;
+import com.itkmitl59.foodbook.profile.User;
+import com.itkmitl59.foodbook.profile.viewProfileActivity;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
@@ -50,7 +60,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     private TextView foodName;
     private TextView foodDescription;
     private TextView foodIngredients;
-    private LinearLayout howToList;
+    private LinearLayout howToList,link_profile;
     private RecyclerView commentList;
     private EditText commentMessage;
     private Button postComment;
@@ -58,7 +68,9 @@ public class FoodDetailActivity extends AppCompatActivity {
     private TextView likeCount;
     private TextView commentCount;
     private TextView viewCount;
+    private TextView ownerName;
     private CommentAdapter adapter;
+    private ImageView ownerImg;
 
     private List<Comment> comments;
 
@@ -83,6 +95,11 @@ public class FoodDetailActivity extends AppCompatActivity {
         howToList = findViewById(R.id.how_to_list);
         commentCount = findViewById(R.id.comment_count);
         viewCount = findViewById(R.id.view_count);
+
+        ownerName = findViewById(R.id.food_owner_name);
+
+        link_profile = findViewById(R.id.link_profile);
+        ownerImg = findViewById(R.id.food_owner_image);
 
         comments = new ArrayList<>();
         commentMessage = findViewById(R.id.comment_message_input);
@@ -117,6 +134,14 @@ public class FoodDetailActivity extends AppCompatActivity {
             public void unLiked(LikeButton likeButton) {
                 log("like button - " + likeButton.isLiked());
                 manageLike(likeButton.isLiked());
+            }
+        });
+
+
+        link_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -186,6 +211,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodName.setText(item.getName());
         foodDescription.setText(item.getDescription());
         foodIngredients.setText(item.getIngredients());
+        getOwnerDisplay(item.getOwner());
         setDisplayHowTo(item.getHowTos());
         likeCount.setText("" + item.getLike());
         viewCount.setText("เข้าชม " + item.getViews());
@@ -219,7 +245,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             comment.setDate(new Date());
             comment.setMessage(message);
             comment.setFoodID(foodID);
-            comment.setUserID("xxxx user xxxx"); // TODO : set user id in comment
+            comment.setUserID(auth.getCurrentUser().getUid());
             commentMessage.setText("");
             saveComment(comment);
         } else {
@@ -285,5 +311,33 @@ public class FoodDetailActivity extends AppCompatActivity {
                     .update("views", mFoodRecipe.getViews() + 1);
             isUpdatedView = true;
         }
+    }
+
+    private void getOwnerDisplay(String userUid){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference fileUrl = storage.getReference("Users/"+userUid);
+        StorageReference fileRef = fileUrl.child("profile_img.jpg");
+        fileRef.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Picasso.get().load(uri.toString()).fit().centerCrop().into(ownerImg);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+        firestore.collection("Users").document(userUid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    ownerName.setText(documentSnapshot.getString("displayName"));
+                }
+            }
+        });
     }
 }
