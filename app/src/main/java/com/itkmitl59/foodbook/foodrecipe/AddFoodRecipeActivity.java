@@ -213,7 +213,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             Picasso.get().load(imageUri).into(foodImage);
-            mFoodRecipe.setMainImageUrl(imageUri.toString());
+            showLog(data.getType()+"");
         }
     }
 
@@ -342,6 +342,8 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         if (!saved) { // if it first save..  then set ID for save. (int index)
             mFoodRecipe.setUid(foodRecipes.size() + "");
         }
+
+        if(imageUri != null)mFoodRecipe.setMainImageUrl(imageUri.toString());
         mFoodRecipe.setName(foodName.getText().toString());
         mFoodRecipe.setDescription(foodDescription.getText().toString());
         mFoodRecipe.setIngredients(foodIngredients.getText().toString());
