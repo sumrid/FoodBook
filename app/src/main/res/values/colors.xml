@@ -10,4 +10,15 @@
     <color name="grey">#E5E5E5</color>
 
     <color name="divideer_line">#62bfbfbf</color>
+
+    <color name="header_text">#4e4e4e</color>
+    <color name="input_text">#606060</color>
+
+    <color name="food_name">#757575</color>
+    <color name="food_detail">#5c5c5c</color>
+    <color name="food_owner_detail">#9e9e9e</color>
+
+
+    <color name="food_name_header">#404040</color>
+
 </resources>

@@ -35,22 +35,27 @@
 
             <TextView
                 android:id="@+id/displayname_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/kanit"
+                android:gravity="center"
+                android:paddingHorizontal="25dp"
+                android:text="ปอซี่ อิอิ"
                 android:textColor="@color/white"
-                android:textSize="24sp"
-                android:fontFamily="@font/notosans_regular"
-                android:text="ปอซี่ อิอิ" />
+                android:textSize="24sp" />
             ​
+
             <TextView
                 android:id="@+id/about_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="16sp"
-                android:fontFamily="@font/notosans_regular"
+                android:fontFamily="@font/kanit_light"
+                android:gravity="center"
+                android:paddingHorizontal="25dp"
                 android:text="ทดสอบลองพิมทพ์"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="16sp" />
             ​
         </LinearLayout>
 
@@ -59,21 +64,21 @@
             android:id="@+id/view_tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingVertical="8dp"
+            android:paddingVertical="11dp"
             android:orientation="vertical"
             android:gravity="center"
-            android:background="@color/white">
+            android:background="#efefef">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:text="เมนูอาหารที่เขียน"/>
+                android:fontFamily="@font/kanit"
+                android:text="เมนูอาหารที่เขียน"
+                android:textColor="@color/header_text"
+                android:textSize="16sp" />
         </LinearLayout>
-    </android.support.design.widget.AppBarLayout>
-    ​
 
+    </android.support.design.widget.AppBarLayout>
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"

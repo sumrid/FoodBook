@@ -66,7 +66,7 @@ public class FoodDetailActivity extends AppCompatActivity {
     private Button postComment;
     private LikeButton likeButton;
     private TextView likeCount;
-    private TextView commentCount;
+    private TextView commentCount,commentCount2;
     private TextView viewCount;
     private TextView ownerName;
     private CommentAdapter adapter;
@@ -94,6 +94,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodIngredients = findViewById(R.id.food_detail_ingredients);
         howToList = findViewById(R.id.how_to_list);
         commentCount = findViewById(R.id.comment_count);
+        commentCount2 = findViewById(R.id.comment_text);
         viewCount = findViewById(R.id.view_count);
 
         ownerName = findViewById(R.id.food_owner_name);
@@ -177,6 +178,7 @@ public class FoodDetailActivity extends AppCompatActivity {
                             comments.add(document.toObject(Comment.class));
                         }
                         commentCount.setText("" + comments.size());
+                        commentCount2.setText(comments.size()+" ความคิดเห็น");
                         adapter.notifyDataSetChanged();
                     }
                 });

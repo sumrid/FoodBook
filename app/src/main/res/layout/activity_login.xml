@@ -61,8 +61,8 @@
                     android:layout_marginHorizontal="10dp"
                     android:background="@color/transparent"
                     android:fontFamily="sans-serif-light"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="@color/input_text"
+                    android:textSize="20sp" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -97,8 +97,8 @@
                     android:background="@color/transparent"
                     android:fontFamily="sans-serif-light"
                     android:inputType="textPassword"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:textColor="@color/input_text"
+                    android:textSize="20sp" />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

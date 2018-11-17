@@ -86,9 +86,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:fontFamily="@font/notosans_regular"
+                    android:fontFamily="@font/kanit_medium"
                     android:text="เมนูอาหารยอดนิยม"
-                    android:textColor="@color/black"
+                    android:textColor="@color/header_text"
                     android:textSize="18sp" />
 
                 <TextView
@@ -96,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/notosans_regular"
+                    android:fontFamily="@font/kanit_light"
                     android:gravity="right"
                     android:text="ดูทั้งหมด >>"
                     android:textColor="#8dacff"
@@ -135,9 +135,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:fontFamily="@font/notosans_regular"
+                    android:fontFamily="@font/kanit_medium"
                     android:text="เมนูอาหารล่าสุด"
-                    android:textColor="@color/black"
+                    android:textColor="@color/header_text"
                     android:textSize="18sp" />
 
                 <TextView
@@ -145,7 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/notosans_regular"
+                    android:fontFamily="@font/kanit_light"
                     android:gravity="right"
                     android:text="ดูทั้งหมด >>"
                     android:textColor="#8dacff"

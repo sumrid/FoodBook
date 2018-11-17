@@ -2,7 +2,9 @@ package com.itkmitl59.foodbook.profile;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +24,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.LoginActivity;
 import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
@@ -200,5 +211,22 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
             Picasso.get().load(userImgUrl).fit().centerCrop().into(mProfileImage);
         displayName.setText(curUser.getDisplayName());
         aboutText.setText(curUser.getAboutme());
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference fileUrl = storage.getReference("Users/"+mAuth.getUid());
+        StorageReference fileRef = fileUrl.child("profile_img.jpg");
+        fileRef.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        userImgUrl = uri.toString();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                userImgUrl = null;
+                Log.d(TAG, e.getMessage());
+            }
+        });
     }
 }

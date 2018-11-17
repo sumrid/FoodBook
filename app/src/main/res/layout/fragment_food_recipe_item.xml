@@ -25,10 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/food_image_item"
             android:ellipsize="end"
+            android:fontFamily="@font/kanit"
             android:maxLines="1"
-            android:textColor="#535353"
-            tools:text="ผัดกระเพราไก่"
-            android:textSize="17dp" />
+            android:textColor="@color/food_name"
+            android:textSize="17dp"
+            tools:text="ผัดกระเพราไก่" />
 
         <TextView
             android:id="@+id/food_description_item"
@@ -37,58 +38,67 @@
             android:layout_below="@id/food_name_item"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/food_image_item"
-            android:textColor="#a9a9a9"
+            android:fontFamily="@font/notosans_regular"
             android:maxLines="2"
-            tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ"
-            android:textSize="12dp" />
+            android:textColor="@color/food_detail"
+            android:textSize="12dp"
+            tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ" />
 
         <TextView
             android:id="@+id/food_viewcount_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
             android:layout_alignParentEnd="true"
-            android:textColor="#aeaeae"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/kanit_light"
             android:text="views 15"
+            android:textColor="@color/food_owner_detail"
             android:textSize="10sp" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
             android:layout_toRightOf="@id/food_image_item"
-            android:layout_below="@id/food_description_item"
             android:gravity="center_vertical"
             android:weightSum="3">
+
             <LinearLayout
                 android:id="@+id/link_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_weight="2">
+                android:layout_weight="2"
+                android:gravity="center_vertical">
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_user" />
+
                 <TextView
                     android:id="@+id/food_owner_item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="11sp"
                     android:layout_marginLeft="5dp"
-                    tools:text="DisplayNemeUser"
-                    />
+                    android:fontFamily="@font/kanit_light"
+                    android:textColor="@color/food_owner_detail"
+                    android:textSize="11sp"
+                    tools:text="DisplayNemeUser" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/food_posttime_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="15 ชั่วโมงที่แล้ว"
+                android:fontFamily="@font/kanit_light"
                 android:gravity="right"
-                android:textColor="#aeaeae"
+                android:text="15 ชั่วโมงที่แล้ว"
+                android:textColor="@color/food_owner_detail"
                 android:textSize="10sp" />
 
         </LinearLayout>

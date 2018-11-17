@@ -19,10 +19,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\OPorzii\Desktop\exp\logout_ico.png" />
-                                      <entry key="outputName" value="logout_ico" />
+                                      <entry key="imageAsset" value="C:\Users\OPorzii\Desktop\exp\Close Icon.png" />
+                                      <entry key="outputName" value="close_ico" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="themeColor" value="b4b4b4" />
                                     </map>
                                   </option>
                                 </PersistentState>

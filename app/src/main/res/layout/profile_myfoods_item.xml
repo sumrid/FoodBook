@@ -25,10 +25,11 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/food_image_item"
             android:ellipsize="end"
+            android:fontFamily="@font/kanit"
             android:maxLines="1"
-            android:textColor="#535353"
-            tools:text="ผัดกระเพราไก่"
-            android:textSize="17dp" />
+            android:textColor="@color/food_name"
+            android:textSize="17dp"
+            tools:text="ผัดกระเพราไก่" />
 
         <TextView
             android:id="@+id/food_description_item"
@@ -37,33 +38,36 @@
             android:layout_below="@id/food_name_item"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/food_image_item"
-            android:textColor="#a9a9a9"
+            android:fontFamily="@font/notosans_regular"
             android:maxLines="2"
-            tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ"
-            android:textSize="12dp" />
-
+            android:textColor="@color/food_detail"
+            android:textSize="12dp"
+            tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
             android:layout_toRightOf="@id/food_image_item"
-            android:layout_below="@id/food_description_item"
             android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:textSize="12sp"
-                tools:text="Like" />
+                android:fontFamily="@font/notosans_regular"
+                android:text="Like"
+                android:textColor="@color/food_owner_detail"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans_regular"
+                android:textColor="@color/food_owner_detail"
                 android:textSize="12sp"
                 tools:text="999" />
 
@@ -72,13 +76,15 @@
                 android:layout_height="15dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/comments_ico"/>
+                android:src="@drawable/comments_ico" />
 
             <TextView
                 android:id="@+id/comment_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans_regular"
                 android:text="999"
+                android:textColor="@color/food_owner_detail"
                 android:textSize="12sp" />
 
             <TextView
@@ -86,14 +92,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="8dp"
-                android:textSize="12sp"
-                android:text="เข้าชม" />
+                android:fontFamily="@font/notosans_regular"
+                android:text="เข้าชม"
+                android:textColor="@color/food_owner_detail"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/view_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/notosans_regular"
                 android:text="999"
+                android:textColor="@color/food_owner_detail"
                 android:textSize="12sp" />
         </LinearLayout>
 
