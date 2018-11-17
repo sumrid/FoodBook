@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -30,6 +32,7 @@ public class myfoodsPage extends Fragment {
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();
 
+    private TextView noItem;
     private RecyclerView myfoodList;
     private myfoodsAdapter adapter;
     private ArrayList<FoodRecipe> foodRecipes;
@@ -45,6 +48,7 @@ public class myfoodsPage extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        noItem = getActivity().findViewById(R.id.no_item_message);
 
         foodRecipes = new ArrayList<>();
         initRecyclerView();
@@ -75,11 +79,17 @@ public class myfoodsPage extends Fragment {
         } else {
             query = query.whereEqualTo("owner", auth.getCurrentUser().getUid());   // find my food recipe
         }
-
+        // TODO : it can't order don't know why !!!! WHAT THE ....!!!
         query.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
                 foodRecipes.clear();
+                if (queryDocumentSnapshots.isEmpty()) {
+                    noItem.setVisibility(View.VISIBLE);
+                } else {
+                    noItem.setVisibility(View.GONE);
+                }
+
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     FoodRecipe item = document.toObject(FoodRecipe.class);
                     item.setUid(document.getId());
@@ -111,6 +121,15 @@ public class myfoodsPage extends Fragment {
             foodRecipes.clear();
             foodRecipes.addAll(dataSet);
             adapter.notifyDataSetChanged();
+
+            if(dataSet.size() < 1) {
+                noItem.setVisibility(View.VISIBLE);
+                Log.d(TAG, dataSet.size()+" << data size local");
+            } else {
+                noItem.setVisibility(View.GONE);
+            }
+        } else {
+            noItem.setVisibility(View.VISIBLE);
         }
     }
 
