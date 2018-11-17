@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -66,6 +67,16 @@ public class FoodListActivity extends AppCompatActivity {
         initRecyclerView();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initRecyclerView() {
         foodList = findViewById(R.id.food_show_list);
         adapter = new FoodListAdapter(foodRecipes, this);
@@ -73,6 +84,7 @@ public class FoodListActivity extends AppCompatActivity {
         foodList.setHasFixedSize(true);
         foodList.setAdapter(adapter);
         foodList.setLayoutManager(new LinearLayoutManager(this));
+        foodList.addItemDecoration(new DividerItem(getApplicationContext(), LinearLayoutManager.VERTICAL, 15));
     }
 
     private void loadDataSetFromFirebase() {

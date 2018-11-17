@@ -17,7 +17,7 @@ android:layout_height="wrap_content">
         android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        android:src="@drawable/person_img" />
+        android:src="@drawable/ic_user" />
 
     <TextView
         android:id="@+id/comment_user_name"

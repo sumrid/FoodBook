@@ -99,7 +99,9 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         foodAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!checkInpEmpty()) {
+                if(foodName.getText().toString().isEmpty() || foodIngredients.getText().toString().isEmpty()
+                        || foodDescription.getText().toString().isEmpty() || howTo.isEmpty()
+                        || foodCategory.getText().toString().isEmpty() ) {
                     showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
                     return;
                 }
@@ -312,7 +314,8 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            showSaveDialog();
+            if(checkInpEmpty()) showSaveDialog();
+            else finish();
         }
         return super.onOptionsItemSelected(item);
     }

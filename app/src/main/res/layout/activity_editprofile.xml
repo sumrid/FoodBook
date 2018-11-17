@@ -54,7 +54,7 @@
                     android:id="@+id/profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/person_img" />
+                    android:src="@drawable/ic_user" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -129,7 +129,8 @@
                         android:background="@color/transparent"
                         android:enabled="false"
                         android:paddingHorizontal="20dp"
-                        android:textColor="@color/input_text"
+                        android:textColor="#b7b7b7"
+                        tools:text="test@test.com"
                         android:textSize="16sp" />
 
                     <View
@@ -160,13 +161,13 @@
                         android:id="@+id/inp_pass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="2dp"
                         android:background="@color/transparent"
                         android:hint="••••••••••"
                         android:inputType="textPassword"
                         android:paddingHorizontal="20dp"
                         android:textColor="@color/input_text"
-                        android:textSize="18sp" />
+                        android:textSize="20sp" />
 
                     <View
                         android:layout_width="match_parent"

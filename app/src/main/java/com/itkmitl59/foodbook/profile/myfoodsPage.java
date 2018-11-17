@@ -25,6 +25,7 @@ import com.orhanobut.hawk.Hawk;
 import java.util.ArrayList;
 
 public class myfoodsPage extends Fragment {
+    private static final String TAG = "myFoods_log";
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseAuth auth = FirebaseAuth.getInstance();

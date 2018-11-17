@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_log";
     private boolean doubleBackToExitPressedOnce = false;
 
-
+    private BottomNavigationView bottomNavigationView;
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -74,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
 
-
-
         if(!haveCurrentUser()){
             finish();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -96,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         Log.d(TAG,"RESUMMM");
         getUserData();
+        Fragment f = getSupportFragmentManager().findFragmentById(R.id.main_view);
+        if(f instanceof HomeFragment) bottomNavigationView.setSelectedItemId(R.id.menu_home);
+        if(f instanceof CategoryFragment) bottomNavigationView.setSelectedItemId(R.id.menu_categoies);
+        if(f instanceof ProfileFragment) bottomNavigationView.setSelectedItemId(R.id.menu_profile);
+
+
         super.onResume();
     }
 
@@ -130,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
             }, 2000);
 
         } else {
-            super.onBackPressed();
+            bottomNavigationView.setSelectedItemId(R.id.menu_home);
+            showFragment(new HomeFragment());
         }
     }
 
@@ -167,8 +173,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     private void initBottomNavbar(){
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
+        bottomNavigationView = findViewById(R.id.bottom_nav_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -195,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_view, fragment)
-                .addToBackStack(null)
                 .commit();
 
     }

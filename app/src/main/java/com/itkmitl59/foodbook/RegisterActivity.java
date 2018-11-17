@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -92,7 +93,12 @@ public class RegisterActivity extends AppCompatActivity {
         repasswordReg.addTextChangedListener(new MyTextWatcher(repasswordReg));
         phoneReg.addTextChangedListener(new MyTextWatcher(phoneReg));
 
-
+        imgProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSelectImageWindow();
+            }
+        });
         addImgProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean validateName() {
         nameStr = nameReg.getText().toString();
         if (nameStr.trim().isEmpty()) {
-            inpLayoutName.setError("กรอกชื่อ-นามสกุล");
+            inpLayoutName.setError("กรอกชื่อที่ใช้แสดงบนโฟลไฟล์");
             requestFocus(nameReg);
             return false;
         } else {
@@ -309,5 +315,14 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }

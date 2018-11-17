@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,7 +72,8 @@ public class editProfileActivity extends AppCompatActivity {
 
         curUser = (User) getIntent().getSerializableExtra("curUser");
         userImgUrl = getIntent().getStringExtra("imgUser");
-        Picasso.get().load(userImgUrl).fit().centerCrop().into(user_img);
+
+        if(userImgUrl!=null) Picasso.get().load(userImgUrl).fit().centerCrop().into(user_img);
 
         final RelativeLayout profile_img = (RelativeLayout) findViewById(R.id.layout_img_profile);
 
@@ -107,8 +109,8 @@ public class editProfileActivity extends AppCompatActivity {
                 String phoneStr = user_phone.getText().toString();
 
 
-                if (nameStr.isEmpty() || phoneStr.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Please enter your information", Toast.LENGTH_LONG).show();
+                if (nameStr.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"กรุณากรอกข้อมูลที่จำเป็น", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(getApplicationContext(),"Working...", Toast.LENGTH_LONG).show();
                     final User user = new User(nameStr, emailStr, phoneStr,aboutStr);
@@ -245,6 +247,14 @@ public class editProfileActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 }
