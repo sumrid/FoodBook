@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#F1F1F1">
+    android:background="#F1F1F1"
+    android:paddingBottom="56dp">
 
     <RelativeLayout
         android:id="@+id/header_layout"
