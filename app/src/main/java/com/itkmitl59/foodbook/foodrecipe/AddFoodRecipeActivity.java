@@ -80,6 +80,9 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         foodDescription = findViewById(R.id.food_description);
         progressBar = findViewById(R.id.progressBar);
 
+
+
+
         foodCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +99,10 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         foodAddButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!checkInpEmpty()) {
+                    showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
+                    return;
+                }
                 setLoading(true);
                 showLog("Click add button");
                 uploadImage();
@@ -393,6 +400,14 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        showSaveDialog();
+        if(checkInpEmpty()) showSaveDialog();
+        else super.onBackPressed();
+    }
+
+    private boolean checkInpEmpty(){
+        if(!(foodName.getText().toString().isEmpty()) || !(foodDescription.getText().toString().isEmpty())
+                || !(foodIngredients.getText().toString().isEmpty()))
+            return true;
+        return false;
     }
 }

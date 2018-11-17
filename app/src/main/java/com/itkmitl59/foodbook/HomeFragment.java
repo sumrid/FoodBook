@@ -72,6 +72,11 @@ public class HomeFragment extends Fragment {
             }
         });
 
+
+        ((MainActivity)getActivity()).changeStatusBarColor("#00000000");
+
+
+
         foodRecipes = new ArrayList<>();
         loadDataSetFromFirebase();
         initRecyclerView();

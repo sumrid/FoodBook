@@ -26,16 +26,18 @@
             android:scaleType="centerCrop"
             android:background="#d2d2d2"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
-        <TextView
-            android:id="@+id/popular_name_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="16sp"
-            android:ellipsize="end"
-            android:maxLength="15"
-            android:fontFamily="@font/notosans_regular"
-            android:text="ชื่ออาหาร"/>
+
+            <TextView
+                android:id="@+id/popular_name_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/kanit"
+                android:maxLength="17"
+                android:textColor="@color/food_name"
+                android:textSize="16sp"
+                tools:text="ชื่ออาหาร" />
 
 
             <LinearLayout
@@ -53,15 +55,17 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_user" />
+
                     <TextView
                         android:id="@+id/popular_owner_item"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="14"
-                        android:textSize="11sp"
                         android:layout_marginLeft="4dp"
-                        android:text="ปอซี่ อิอิ"
-                        />
+                        android:fontFamily="@font/kanit_light"
+                        android:maxLength="14"
+                        android:textColor="@color/food_owner_detail"
+                        android:textSize="11sp"
+                        tools:text="ปอซี่ อิอิ" />
                 </LinearLayout>
 
                 <TextView
@@ -70,9 +74,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:fontFamily="@font/kanit_light"
                     android:gravity="right"
-                    android:text="Like 199"
-                    android:textSize="10sp" />
+                    android:textColor="@color/food_detail"
+                    android:textSize="10sp"
+                    tools:text="Like 199" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

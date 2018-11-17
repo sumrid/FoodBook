@@ -11,6 +11,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="230dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -57,16 +58,19 @@
                 android:id="@+id/food_detail_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
+                android:fontFamily="@font/kanit"
+                android:textColor="@color/food_name_header"
                 android:textSize="20dp"
+                android:layout_marginBottom="10dp"
                 tools:text="ต้มเลือดหมู" />
+
 
             <TextView
                 android:id="@+id/food_detail_descrip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:textColor="#848484"
+                android:textColor="@color/food_detail"
+                android:layout_marginLeft="5dp"
                 android:textSize="15dp"
                 tools:text="ต้มเลือดหมู" />
 
@@ -90,6 +94,8 @@
                     android:id="@+id/like_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/kanit_light"
+                    android:textSize="12sp"
                     tools:text="999" />
 
                 <ImageView
@@ -103,20 +109,24 @@
                     android:id="@+id/comment_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0" />
+                    android:fontFamily="@font/kanit_light"
+                    android:text="0"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/view_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="เข้าชม 999" />
-
+                    android:fontFamily="@font/kanit_light"
+                    android:text="เข้าชม 999"
+                    android:textSize="12sp" />
                 <LinearLayout
                     android:id="@+id/link_profile"
+                    android:layout_marginVertical="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2">
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/food_owner_image"
@@ -134,7 +144,6 @@
                         />
                 </LinearLayout>
 
-
             </LinearLayout>
 
             <View
@@ -143,20 +152,19 @@
                 android:background="@color/divideer_line"/>
 
 
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:fontFamily="@font/notosans_regular"
+                android:fontFamily="@font/kanit"
                 android:text="ส่วนประกอบ"
+                android:textColor="@color/food_name_header"
                 android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/food_detail_ingredients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
                 android:textSize="16dp"
                 tools:text="เนื้อหมู ไข่ ไก่ น้ำ คนอร์" />
 
@@ -169,22 +177,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/notosans_regular"
-                android:textSize="18dp"
-                android:text="วิธีการทำ"/>
+                android:fontFamily="@font/kanit"
+                android:text="วิธีการทำ"
+                android:textColor="@color/food_name_header"
+                android:textSize="18dp" />
 
             <LinearLayout
                 android:id="@+id/how_to_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"/>
+
 
             <TextView
                 android:id="@+id/comment_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/kanit"
                 android:text="ความคิดเห็น"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/food_name_header"
                 android:textSize="18sp" />
 
             <android.support.v7.widget.RecyclerView

@@ -2,7 +2,9 @@ package com.itkmitl59.foodbook.profile;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +24,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.LoginActivity;
 import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
@@ -40,6 +51,8 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
     private TextView displayName, aboutText;
     private User curUser;
     private String userImgUrl;
+
+
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -67,15 +80,26 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         displayName = (TextView) view.findViewById(R.id.displayname_text);
         aboutText = (TextView) view.findViewById(R.id.about_text);
 
+        curUser = ((MainActivity) getActivity()).getCurrentUser();
+
+        if(curUser==null){
+            getUserData();
+        } else {
+            displayName.setText(curUser.getDisplayName());
+            aboutText.setText(curUser.getAboutme());
+        }
+
+
 
         userImgUrl = ((MainActivity) getActivity()).getUserImgUrl();
+
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.logout_ico);
             activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        curUser = ((MainActivity) getActivity()).getCurrentUser();
+
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setVisibility(View.VISIBLE);
@@ -85,12 +109,14 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         if (userImgUrl != null)
             Picasso.get().load(userImgUrl).fit().centerCrop().into(mProfileImage);
 
-        displayName.setText(curUser.getDisplayName());
-        aboutText.setText(curUser.getAboutme());
+
 
 
         return view;
     }
+
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -192,6 +218,46 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getUserData(){
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        mFirestore.collection("Users").document(mAuth.getCurrentUser().getUid())
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+
+                    DocumentSnapshot documentSnapshot = task.getResult();
+
+                    curUser = new User(documentSnapshot.getString("displayName"),
+                            mAuth.getCurrentUser().getEmail(),
+                            documentSnapshot.getString("phone"),
+                            documentSnapshot.getString("aboutme"));
+
+                    displayName.setText(curUser.getDisplayName());
+                    aboutText.setText(curUser.getAboutme());
+                }
+            }
+        });
+
+        StorageReference fileUrl = storage.getReference("Users/"+mAuth.getUid());
+        StorageReference fileRef = fileUrl.child("profile_img.jpg");
+        fileRef.getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        userImgUrl = uri.toString();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                userImgUrl = null;
+                Log.d(TAG, e.getMessage());
+            }
+        });
+
     }
 
 
