@@ -38,7 +38,7 @@ public class FoodListActivity extends AppCompatActivity {
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.foodlist_toolbar);
         setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setTitle("เมนูอาหารล่าสุด");
             getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -46,15 +46,21 @@ public class FoodListActivity extends AppCompatActivity {
 
         foodRecipes = new ArrayList<>();
 
-        if (getKeyword() == null && getCategory() == null) {
+        if (getPopular() != null) {            // get popular food
+            loadDataSetFromFirebaseOrderByLike();
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle("เมนูยอดนิยม");
+        } else if (getCategory() != null) {    // get food by category
+            getDataByCategory(getCategory());
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle("หมวดหมู่ " + getCategory());
+        } else if (getKeyword() != null){      // get food by keyword
+            getDataByKeyword(getKeyword());
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle("ค้นหา  " + getKeyword());
+        } else {
             log("load all recipe");
             loadDataSetFromFirebase();
-        } else if (getCategory() != null) {
-            getDataByCategory(getCategory());
-            if(getSupportActionBar() != null) getSupportActionBar().setTitle("หมวดหมู่ " + getCategory());
-        } else {
-            getDataByKeyword(getKeyword());
-            if(getSupportActionBar() != null) getSupportActionBar().setTitle("ค้นหา  " +getKeyword());
         }
 
         initRecyclerView();
@@ -72,6 +78,23 @@ public class FoodListActivity extends AppCompatActivity {
     private void loadDataSetFromFirebase() {
         firestore.collection("FoodRecipes")
                 .orderBy("uid", Query.Direction.DESCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                        foodRecipes.clear();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            FoodRecipe item = document.toObject(FoodRecipe.class);
+                            item.setUid(document.getId());
+                            foodRecipes.add(item);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+    }
+
+    private void loadDataSetFromFirebaseOrderByLike() {
+        firestore.collection("FoodRecipes")
+                .orderBy("like", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
@@ -128,12 +151,17 @@ public class FoodListActivity extends AppCompatActivity {
 
     private String getKeyword() {
         String keyword = getIntent().getStringExtra("keyword");
-        if(keyword != null) log(keyword);
+        if (keyword != null) log(keyword);
         return keyword;
     }
 
     private String getCategory() {
         String category = getIntent().getStringExtra("category");
+        return category;
+    }
+
+    private String getPopular() {
+        String category = getIntent().getStringExtra("allPopular");
         return category;
     }
 }

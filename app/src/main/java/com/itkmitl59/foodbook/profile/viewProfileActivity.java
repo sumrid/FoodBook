@@ -80,7 +80,13 @@ public class viewProfileActivity extends AppCompatActivity implements AppBarLayo
 
     private void setupViewPager(ViewPager viewPager) {
         ProfileFragment.Adapter adapter = new ProfileFragment.Adapter(getSupportFragmentManager());
-        adapter.addFragment(new myfoodsPage(), "เมนูอาหารที่เขียน");
+
+        myfoodsPage page = new myfoodsPage();
+        Bundle bundle = new Bundle();
+        bundle.putString("otherID", getIntent().getStringExtra("viewUid"));
+        page.setArguments(bundle);
+
+        adapter.addFragment(page, "เมนูอาหารที่เขียน");
         viewPager.setAdapter(adapter);
     }
 

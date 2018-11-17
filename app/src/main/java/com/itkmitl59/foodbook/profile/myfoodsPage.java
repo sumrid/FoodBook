@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.itkmitl59.foodbook.R;
@@ -45,7 +47,7 @@ public class myfoodsPage extends Fragment {
 
         foodRecipes = new ArrayList<>();
         initRecyclerView();
-        if (isHaveBundle()) {
+        if (isForLocalSave()) {
             getLocalData();
         } else {
             loadDataSetFromFirebase();
@@ -64,35 +66,46 @@ public class myfoodsPage extends Fragment {
     }
 
     private void loadDataSetFromFirebase() {
-        firestore.collection("FoodRecipes")
-                .whereEqualTo("owner", auth.getCurrentUser().getUid())
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                        foodRecipes.clear();
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            FoodRecipe item = document.toObject(FoodRecipe.class);
-                            item.setUid(document.getId());
-                            foodRecipes.add(item);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+        Query query = firestore.collection("FoodRecipes");
+
+        if (getBundle() != null) {
+            Log.d("Food page", getBundle().getString("otherID"));
+            query = query.whereEqualTo("owner", getBundle().getString("otherID"));   // find other food recipe
+        } else {
+            query = query.whereEqualTo("owner", auth.getCurrentUser().getUid());   // find my food recipe
+        }
+
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                foodRecipes.clear();
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    FoodRecipe item = document.toObject(FoodRecipe.class);
+                    item.setUid(document.getId());
+                    foodRecipes.add(item);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    private boolean isHaveBundle() {
+    private boolean isForLocalSave() {
         Bundle bundle = getArguments();
-        if (bundle == null) {
-            return false;
+        if (bundle != null) {
+            if (bundle.get("localSave") != null) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return true;
+            return false;
         }
     }
 
     private void getLocalData() {
-        if(Hawk.isBuilt() == false) Hawk.init(getContext()).build();
+        if (Hawk.isBuilt() == false) Hawk.init(getContext()).build();
 
-        if(Hawk.get("recipe") != null) {
+        if (Hawk.get("recipe") != null) {
             ArrayList<FoodRecipe> dataSet = Hawk.get("recipe");
             foodRecipes.clear();
             foodRecipes.addAll(dataSet);
@@ -103,10 +116,15 @@ public class myfoodsPage extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isHaveBundle()) {
+        if (isForLocalSave()) {
             getLocalData();
         } else {
             loadDataSetFromFirebase();
         }
+    }
+
+    private Bundle getBundle() {
+        Bundle bundle = getArguments();
+        return bundle;
     }
 }

@@ -28,7 +28,6 @@ import com.itkmitl59.foodbook.foodrecipe.FoodListActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipeAdapter;
 import com.itkmitl59.foodbook.foodrecipe.PoppularRecipeAdapter;
-import com.itkmitl59.foodbook.profile.User;
 
 import java.util.ArrayList;
 
@@ -62,12 +61,16 @@ public class HomeFragment extends Fragment {
         viewAllBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openIntent("");
+                startActivity(new Intent(getActivity(), FoodListActivity.class));
             }
         });
-
-        // FOR TEST
-//        auth.signInWithEmailAndPassword("a@a.com", "12341234");
+        TextView popularSeeAll = getView().findViewById(R.id.view_all_popular);
+        popularSeeAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPopularIntent();
+            }
+        });
 
         foodRecipes = new ArrayList<>();
         loadDataSetFromFirebase();
@@ -128,7 +131,7 @@ public class HomeFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    openIntent(v.getText().toString());
+                    openSearchIntent(v.getText().toString());
                     return true;
                 }
                 return false;
@@ -136,10 +139,16 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void openIntent(String keyword) {
-        Log.d("Main", keyword);
+    private void openSearchIntent(String keyword) {
+        Log.d("Main", "Keyword: " + keyword);
         Intent intent = new Intent(getActivity(), FoodListActivity.class);
         intent.putExtra("keyword", keyword);
+        startActivity(intent);
+    }
+
+    private void openPopularIntent() {
+        Intent intent = new Intent(getActivity(), FoodListActivity.class);
+        intent.putExtra("allPopular", "allPopular");
         startActivity(intent);
     }
 

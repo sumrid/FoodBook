@@ -92,6 +92,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/view_all_popular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
