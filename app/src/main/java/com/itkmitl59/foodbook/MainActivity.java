@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
     public void showFragment(Fragment fragment){
         getSupportFragmentManager()
                 .beginTransaction()
+//                .setCustomAnimations(R.anim.fragment_trans,R.anim.fragment_trans_exit)
                 .replace(R.id.main_view, fragment)
                 .commit();
 

@@ -33,8 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
+                android:maxLines="1"
                 android:fontFamily="@font/kanit"
-                android:maxLength="17"
+                android:maxEms="5"
                 android:textColor="@color/food_name"
                 android:textSize="16sp"
                 tools:text="ชื่ออาหาร" />
@@ -62,7 +63,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:fontFamily="@font/kanit_light"
-                        android:maxLength="14"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:maxEms="3"
                         android:textColor="@color/food_owner_detail"
                         android:textSize="11sp"
                         tools:text="ปอซี่ อิอิ" />

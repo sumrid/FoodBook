@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         mProfileImage = (ImageView) view.findViewById(R.id.profile_image);
 
 
-        ((MainActivity)getActivity()).changeStatusBarColor("#80d6ff");
+//        ((MainActivity)getActivity()).changeStatusBarColor("#80d6ff");
 
         appbarLayout.addOnOffsetChangedListener(this);
         mMaxScrollSize = appbarLayout.getTotalScrollRange();

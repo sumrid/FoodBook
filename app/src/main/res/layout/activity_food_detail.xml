@@ -165,6 +165,7 @@
                 android:id="@+id/food_detail_ingredients"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:lineSpacingExtra="5dp"
                 android:textSize="16dp"
                 tools:text="เนื้อหมู ไข่ ไก่ น้ำ คนอร์" />
 

@@ -27,9 +27,10 @@
             android:ellipsize="end"
             android:fontFamily="@font/kanit"
             android:maxLines="1"
+            android:maxEms="6"
             android:textColor="@color/food_name"
             android:textSize="17dp"
-            tools:text="ผัดกระเพราไก่" />
+            tools:text="ผัดกระเพราไก่ฟหกฟหกฟหกหกฟก" />
 
         <TextView
             android:id="@+id/food_description_item"

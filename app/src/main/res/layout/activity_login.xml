@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".LoginActivity"
-        android:background="#7AE9B9">
+        android:background="#79cbff">
 
         <RelativeLayout
             android:id="@+id/header"
@@ -24,6 +24,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="182dp"
                 android:layout_height="114dp"
+                android:transitionName="logoTrans"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="73dp"

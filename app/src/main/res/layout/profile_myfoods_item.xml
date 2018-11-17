@@ -27,6 +27,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/kanit"
             android:maxLines="1"
+            android:maxEms="7"
             android:textColor="@color/food_name"
             android:textSize="17dp"
             tools:text="ผัดกระเพราไก่" />
@@ -40,6 +41,7 @@
             android:layout_toRightOf="@id/food_image_item"
             android:fontFamily="@font/notosans_regular"
             android:maxLines="2"
+            android:ellipsize="end"
             android:textColor="@color/food_detail"
             android:textSize="12dp"
             tools:text="กระเพราไก่ไข่เยี้ยวหมา อร่อยๆ" />

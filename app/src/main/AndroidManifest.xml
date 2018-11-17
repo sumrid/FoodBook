@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".WelcomeScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".foodrecipe.AddFoodRecipeActivity" />
-        <!--<activity android:name=".LoginActivity" />-->
+        <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" android:theme="@style/AppTheme.TransparentTheme" />
         <activity android:name=".MainActivity" android:theme="@style/AppTheme.TransparentTheme"/>
         <activity android:name=".profile.editProfileActivity"/>
         <activity android:name=".foodrecipe.FoodDetailActivity" />
         <activity android:name=".foodrecipe.FoodListActivity"/>
-        <activity android:name=".profile.viewProfileActivity"/>
+        <activity android:name=".profile.viewProfileActivity" android:theme="@style/AppTheme.TransparentTheme" />
         <activity android:name=".foodrecipe.AddHowToActivity"></activity>
 
         <meta-data
