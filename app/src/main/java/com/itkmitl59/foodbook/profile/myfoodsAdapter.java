@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import com.itkmitl59.foodbook.comment.Comment;
 import com.itkmitl59.foodbook.foodrecipe.AddFoodRecipeActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodDetailActivity;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
+import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
         public ImageView foodImage;
         public TextView foodName, foodDescription;
         public TextView likeCount, commentCount, viewCount;
+        public ImageButton delete;
         private ClickListener clickListener;
 
         public ViewHolder(@NonNull View itemView) {
@@ -47,6 +51,7 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
             likeCount = itemView.findViewById(R.id.like_count);
             commentCount = itemView.findViewById(R.id.comment_count);
             viewCount = itemView.findViewById(R.id.view_count);
+            delete = itemView.findViewById(R.id.delete_btn);
             itemView.setOnClickListener(this);
 
         }
@@ -73,14 +78,22 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         final FoodRecipe foodRecipe = mFoodRecipes.get(position);
-        Picasso.get().load(foodRecipe.getMainImageUrl()).fit().centerCrop().into(holder.foodImage);
+        Picasso.get().load(foodRecipe.getMainImageUrl()).fit().centerCrop().placeholder(R.drawable.add_img).into(holder.foodImage);
         holder.foodName.setText(foodRecipe.getName());
         holder.foodDescription.setText(foodRecipe.getDescription());
         holder.viewCount.setText("" + foodRecipe.getViews());
         holder.likeCount.setText("" + foodRecipe.getLike());
         getCommentCount(holder.commentCount, foodRecipe.getUid());
+
+        if (foodRecipe.getUid().length() < 5) holder.delete.setVisibility(View.VISIBLE);
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteLocalSave(foodRecipe);
+            }
+        });
 
         holder.setOnItemClickListener(new ClickListener() {
             @Override
@@ -128,5 +141,28 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
         Intent intent = new Intent(mContext, AddFoodRecipeActivity.class);
         intent.putExtra("recipe", mFoodRecipes.get(position));
         mContext.startActivity(intent);
+    }
+
+    private void deleteLocalSave(FoodRecipe item) {
+        Log.d("Adapter", "click item " + item.getUid());
+
+        if (Hawk.isBuilt() == false) Hawk.init(mContext).build();
+
+        if( Hawk.get("recipe") != null) {
+            ArrayList<FoodRecipe> items = Hawk.get("recipe");
+            int index = -1;
+
+            for(FoodRecipe recipe : items) {
+                if (recipe.getUid().equals(item.getUid())) index = items.indexOf(recipe);
+            }
+
+            items.remove(index);
+
+            Hawk.put("recipe", items);
+
+            mFoodRecipes.clear();
+            mFoodRecipes.addAll(items);
+            notifyItemRemoved(index);
+        }
     }
 }

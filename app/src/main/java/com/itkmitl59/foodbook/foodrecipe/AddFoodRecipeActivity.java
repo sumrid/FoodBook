@@ -379,8 +379,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
             showLog("local howto " + mFoodRecipe.getHowTos());
 
             if (mFoodRecipe.getMainImageUrl() != null) {
-                Uri uri = Uri.parse(mFoodRecipe.getMainImageUrl());
-                Picasso.get().load(uri).into(foodImage);
+                imageUri = Uri.parse(mFoodRecipe.getMainImageUrl());
                 Picasso.get().load(mFoodRecipe.getMainImageUrl()).fit().centerCrop().into(foodImage);
             }
             foodName.setText(mFoodRecipe.getName());
