@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchUIUtil;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,7 +28,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -70,13 +67,15 @@ public class FoodDetailActivity extends AppCompatActivity {
     private TextView commentCount,commentCount2;
     private TextView viewCount;
     private TextView ownerName;
+    private String uidOwner;
+    private User userLink;
     private CommentAdapter adapter;
     private ImageView ownerImg;
 
     private List<Comment> comments;
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,7 +142,10 @@ public class FoodDetailActivity extends AppCompatActivity {
         link_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(), viewProfileActivity.class);
+                intent.putExtra("curUser", userLink);
+                intent.putExtra("viewUid", uidOwner);
+                startActivity(intent);
             }
         });
     }
@@ -215,6 +217,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         foodDescription.setText(item.getDescription());
         foodIngredients.setText(item.getIngredients());
         getOwnerDisplay(item.getOwner());
+        uidOwner = item.getOwner();
         setDisplayHowTo(item.getHowTos());
         likeCount.setText("" + item.getLike());
         viewCount.setText("เข้าชม " + item.getViews());
@@ -248,7 +251,7 @@ public class FoodDetailActivity extends AppCompatActivity {
             comment.setDate(new Date());
             comment.setMessage(message);
             comment.setFoodID(foodID);
-            comment.setUserID(auth.getCurrentUser().getUid());
+            comment.setUserID(mAuth.getCurrentUser().getUid());
             commentMessage.setText("");
             saveComment(comment);
         } else {
@@ -273,13 +276,13 @@ public class FoodDetailActivity extends AppCompatActivity {
         int num = 0;
         if (isLiked) {
             num = 1;
-            Like like = new Like(foodID, auth.getCurrentUser().getUid());
+            Like like = new Like(foodID, mAuth.getCurrentUser().getUid());
             firestore.collection("liked")
-                    .document(foodID + "_" + auth.getCurrentUser().getUid())
+                    .document(foodID + "_" + mAuth.getCurrentUser().getUid())
                     .set(like);
         } else {
             num = -1;
-            String documentName = foodID + "_" + auth.getCurrentUser().getUid();
+            String documentName = foodID + "_" + mAuth.getCurrentUser().getUid();
             firestore.collection("liked")
                     .document(documentName)
                     .delete();
@@ -295,7 +298,7 @@ public class FoodDetailActivity extends AppCompatActivity {
         log("check user liked");
         firestore.collection("liked")
                 .whereEqualTo("foodID", foodID)
-                .whereEqualTo("userID", auth.getCurrentUser().getUid())
+                .whereEqualTo("userID", mAuth.getCurrentUser().getUid())
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -338,7 +341,11 @@ public class FoodDetailActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
                     DocumentSnapshot documentSnapshot = task.getResult();
-                    ownerName.setText(documentSnapshot.getString("displayName"));
+                    userLink =  new User(documentSnapshot.getString("displayName"),
+                            mAuth.getCurrentUser().getEmail(),
+                            documentSnapshot.getString("phone"),
+                            documentSnapshot.getString("aboutme"));
+                    ownerName.setText(userLink.getDisplayName());
                 }
             }
         });

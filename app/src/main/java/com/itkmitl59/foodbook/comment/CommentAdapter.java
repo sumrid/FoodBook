@@ -1,6 +1,7 @@
 package com.itkmitl59.foodbook.comment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,6 +24,8 @@ import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipeAdapter;
+import com.itkmitl59.foodbook.profile.User;
+import com.itkmitl59.foodbook.profile.viewProfileActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +34,7 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHolder> {
     private List<Comment> mComments;
     private Context mContext;
+    private User userLink;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView userName;
@@ -52,12 +59,19 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Comment item = mComments.get(position);
+        final Comment item = mComments.get(position);
 
         setDisplayUser(holder, item);
         holder.message.setText(item.getMessage());
         SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
         holder.date.setText(format.format(item.getDate()));
+
+        holder.userName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewUserData(item.getUserID());
+            }
+        });
     }
 
     @NonNull
@@ -105,4 +119,30 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         });
 
     }
+
+    private void viewUserData(final String userUid){
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        mFirestore.collection("Users").document(userUid)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    userLink = new User(documentSnapshot.getString("displayName"),
+                            mAuth.getCurrentUser().getEmail(),
+                            documentSnapshot.getString("phone"),
+                            documentSnapshot.getString("aboutme"));
+
+                    Intent intent = new Intent(mContext, viewProfileActivity.class);
+                    intent.putExtra("curUser", userLink);
+                    intent.putExtra("viewUid", userUid);
+                    mContext.startActivity(intent);
+                }
+            }
+        });
+    }
+
+
 }

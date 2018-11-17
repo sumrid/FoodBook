@@ -1,45 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".foodrecipe.AddHowToActivity">
 
-    <ImageView
-        android:id="@+id/add_how_to_image"
-        android:src="@drawable/select_image"
+    <FrameLayout
+        android:id="@+id/layout_header"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="200dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:background="#f1f1f1">
 
-    <EditText
-        android:id="@+id/add_how_to_text"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/transparent"/>
+
+        <ImageView
+            android:id="@+id/add_how_to_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/add_img" />
+    </FrameLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_name"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="56dp"
-        android:text="text here...."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_how_to_image" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_header"
+        android:paddingHorizontal="15dp"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/add_how_to_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nextFocusUp="@id/add_how_to_text"
+            android:nextFocusLeft="@id/layout_header"
+            android:layout_alignStart="@+id/input_layout_name"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/grey"
+            android:fontFamily="@font/notosans_regular"
+            android:hint="เขียนรายละเอียดวิธีการทำ"
+            android:paddingLeft="10dp"
+            android:textColor="@color/input_text"
+            android:textSize="20sp" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/add_how_to_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_how_to_text" />
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="#b9b9b9"
+        android:text="+ เพิ่ม"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="ขั้นตอน"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_how_to_image" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

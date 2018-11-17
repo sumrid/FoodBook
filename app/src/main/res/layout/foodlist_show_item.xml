@@ -82,7 +82,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/like_ico"
+                    android:src="@drawable/heart_ico"
                     android:layout_marginEnd="4dp"/>
 
                 <TextView
