@@ -135,7 +135,7 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
 
         Adapter adapter = new Adapter(getChildFragmentManager());
         adapter.addFragment(new myfoodsPage(), "เมนูอาหารที่เขียน");
-        adapter.addFragment(page2, "ที่บันทึกไว้");
+        adapter.addFragment(page2, "แบบร่างเมนู");
         viewPager.setAdapter(adapter);
     }
 

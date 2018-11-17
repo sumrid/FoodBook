@@ -53,14 +53,12 @@
             android:layout_toRightOf="@id/food_image_item"
             android:gravity="center_vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:fontFamily="@font/notosans_regular"
-                android:text="Like"
-                android:textColor="@color/food_owner_detail"
-                android:textSize="12sp" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/heart_ico"
+                android:layout_marginEnd="4dp"/>
 
             <TextView
                 android:id="@+id/like_count"

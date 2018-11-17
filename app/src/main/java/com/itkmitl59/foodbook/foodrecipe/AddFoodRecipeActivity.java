@@ -293,7 +293,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     private void showDialogSelect() {
         // TODO : It's not complete
-        final String category[] = {"ผัด", "ทอด", "นึ่ง", "ยำ"};
+        final String category[] = {"ต้ม", "ทอด", "นึ่ง", "ผัด","แกง","ย่าง"};
 
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(this);
