@@ -38,6 +38,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.ViewHolder>  {
     private ArrayList<FoodRecipe> mFoodRecipes;
@@ -141,6 +142,7 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
     }
 
     private String calculateTime(Date date) {
+        // TODO: change to use global time
         Date currentTime = new Date();
         DateTime d1 = new DateTime(currentTime);
         DateTime d2 = new DateTime(date);
@@ -151,6 +153,8 @@ public class FoodRecipeAdapter extends RecyclerView.Adapter<FoodRecipeAdapter.Vi
 
         if(hour > 24) {
             return day + " วันที่แล้ว";
+        } else if (hour < 1) {
+            return "ไม่ถึงชั่วโมง";
         } else {
             return hour + " ชั่วโมงที่แล้ว";
         }

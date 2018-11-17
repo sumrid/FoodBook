@@ -26,7 +26,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.itkmitl59.foodbook.category.CategoryFragment;
@@ -34,6 +36,8 @@ import com.itkmitl59.foodbook.foodrecipe.AddFoodRecipeActivity;
 import com.itkmitl59.foodbook.profile.ProfileFragment;
 import com.itkmitl59.foodbook.profile.User;
 import com.squareup.picasso.Picasso;
+
+import javax.annotation.Nullable;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "Main_log";
@@ -128,20 +132,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void getUserData(){
         mFirestore.collection("Users").document(mAuth.getCurrentUser().getUid())
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-
-                    DocumentSnapshot documentSnapshot = task.getResult();
-
-                    currentUser = new User(documentSnapshot.getString("displayName"),
-                            mAuth.getCurrentUser().getEmail(),
-                            documentSnapshot.getString("phone"),
-                            documentSnapshot.getString("aboutme"));
-                }
-            }
-        });
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        currentUser = new User(documentSnapshot.getString("displayName"),
+                                mAuth.getCurrentUser().getEmail(),
+                                documentSnapshot.getString("phone"),
+                                documentSnapshot.getString("aboutme"));
+                    }
+                });
 
         StorageReference fileUrl = storage.getReference("Users/"+mAuth.getUid());
         StorageReference fileRef = fileUrl.child("profile_img.jpg");

@@ -17,6 +17,8 @@ public class User implements Serializable {
         this.aboutme = aboutme;
     }
 
+    public User () {}
+
 
     public String getAboutme() {
         return aboutme;

@@ -75,19 +75,11 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-        curUser = ((MainActivity) getActivity()).getCurrentUser();
-
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
         tabLayout.setVisibility(View.VISIBLE);
         tabLayout.setupWithViewPager(viewPager);
 
-
-        if (userImgUrl != null)
-            Picasso.get().load(userImgUrl).fit().centerCrop().into(mProfileImage);
-
-        displayName.setText(curUser.getDisplayName());
-        aboutText.setText(curUser.getAboutme());
-
+        setDisplayProfile();
 
         return view;
     }
@@ -194,5 +186,19 @@ public class ProfileFragment extends Fragment implements AppBarLayout.OnOffsetCh
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
 
+        setDisplayProfile();
+    }
+
+    private void setDisplayProfile() {
+        curUser = ((MainActivity) getActivity()).getCurrentUser();
+
+        if (userImgUrl != null)
+            Picasso.get().load(userImgUrl).fit().centerCrop().into(mProfileImage);
+        displayName.setText(curUser.getDisplayName());
+        aboutText.setText(curUser.getAboutme());
+    }
 }

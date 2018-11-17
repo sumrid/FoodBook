@@ -98,7 +98,13 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setLoading(true);
                 showLog("Click add button");
-                uploadImage();
+
+                if(isCompleteAllInformation()){
+                    uploadImage();
+                } else {
+                    showToast("กรุณากรอกข้อมูลให้ครบ");
+                    setLoading(false);
+                }
             }
         });
 
@@ -165,7 +171,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     }
 
     private void saveFoodRecipe(String imageUrl) {
-        // TODO : set all data to food recipe
+
         String ducumentName = "food_" + System.currentTimeMillis();
 
         FoodRecipe foodRecipe = new FoodRecipe();
@@ -394,5 +400,17 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         showSaveDialog();
+    }
+
+    private boolean isCompleteAllInformation() {
+        if (foodName.getText().toString().isEmpty() ||
+                foodDescription.getText().toString().isEmpty() ||
+                foodIngredients.getText().toString().isEmpty() ||
+                howTo.size() < 1 ||
+                foodCategory.getText().toString().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
