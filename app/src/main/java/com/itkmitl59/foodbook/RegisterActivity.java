@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -41,7 +42,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ImageView addImgProfile,imgProfile;
     private String nameStr, emailStr, passStr, repassStr, phoneStr,profileImgStr;
     private Uri profileImageUri;
-
+    private ProgressBar progressBar;
+    private Button sigupBtn;
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -65,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         }
 
-
+        progressBar = (ProgressBar) findViewById(R.id.loadbar);
 
         nameReg = (EditText) findViewById(R.id.inp_displayname);
         emailReg = (EditText) findViewById(R.id.inp_email);
@@ -107,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
 
-        Button sigupBtn = (Button) findViewById(R.id.register_btn);
+        sigupBtn = (Button) findViewById(R.id.register_btn);
         sigupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,20 +131,31 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    private void setLoading(boolean isLoading) {
+        if (isLoading) {
+            sigupBtn.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            sigupBtn.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
 
     private void createAccount(final User user, String password) {
+        setLoading(true);
         mAuth.createUserWithEmailAndPassword(user.getEmail(), password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 saveUserInfo(mAuth.getUid(),user);
                 if(profileImageUri!=null) uploadImage(mAuth.getUid());
-                Toast.makeText(getApplicationContext(), "Register Complete", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "ลงทะเบียนเรียบร้อย", Toast.LENGTH_LONG).show();
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
 
             @Override
             public void onFailure(@NonNull Exception e) {
+                setLoading(false);
                 Log.d("RegisterResult", e.getMessage());
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
 

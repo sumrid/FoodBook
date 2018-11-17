@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
+    private ProgressBar progressBar;
+    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +43,8 @@ public class LoginActivity extends AppCompatActivity {
 
         final EditText emailLogin = (EditText) findViewById(R.id.inp_email);
         final EditText passwordLogin = (EditText) findViewById(R.id.inp_password);
-        final Button btnLogin = (Button) findViewById(R.id.btn_login);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        progressBar = (ProgressBar) findViewById(R.id.loadbar);
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -48,12 +52,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String userEmail = emailLogin.getText().toString();
                 String userPass = passwordLogin.getText().toString();
-
                 if (userEmail.isEmpty() || userPass.isEmpty()){
                     Toast.makeText(LoginActivity.this, "Please enter your informations", Toast.LENGTH_SHORT).show();
                 }else{
+                    setLoading(true);
                     signIn(userEmail, userPass);
-                    Toast.makeText(LoginActivity.this, "Please wait...", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -70,11 +73,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    private void setLoading(boolean isLoading) {
+        if (isLoading) {
+            btnLogin.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            btnLogin.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
     private void signIn(String email, String password) {
+        btnLogin.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                setLoading(false);
                 Toast.makeText(LoginActivity.this, "Fail : " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<AuthResult>() {

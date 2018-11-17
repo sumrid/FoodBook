@@ -217,10 +217,11 @@
                     android:id="@+id/comment_message_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:layout_toLeftOf="@id/post_comment_btn"
                     android:layout_marginStart="15dp"
+                    android:layout_toLeftOf="@id/post_comment_btn"
+                    android:background="@color/transparent"
                     android:hint="แสดงความคิดเห็น"
+                    android:textColor="@color/input_text"
                     android:textSize="14sp" />
                 <Button
                     android:id="@+id/post_comment_btn"

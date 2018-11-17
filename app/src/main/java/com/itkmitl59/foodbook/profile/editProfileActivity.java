@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,8 @@ public class editProfileActivity extends AppCompatActivity {
     private ImageView user_img;
     private Uri profileImageUri;
     private TextView user_pass;
+    private Button btn_save;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +71,7 @@ public class editProfileActivity extends AppCompatActivity {
         final EditText user_about = (EditText) findViewById(R.id.inp_about);
         user_img = (ImageView) findViewById(R.id.profile_image);
         user_pass = (TextView) findViewById(R.id.inp_pass);
-        final Button btn_save = (Button) findViewById(R.id.btn_save);
+        btn_save = (Button) findViewById(R.id.btn_save);
 
         curUser = (User) getIntent().getSerializableExtra("curUser");
         userImgUrl = getIntent().getStringExtra("imgUser");
@@ -77,6 +80,7 @@ public class editProfileActivity extends AppCompatActivity {
 
         final RelativeLayout profile_img = (RelativeLayout) findViewById(R.id.layout_img_profile);
 
+        progressBar = (ProgressBar) findViewById(R.id.loadbar);
 
         user_displayname.setText(curUser.getDisplayName());
         user_email.setText(curUser.getEmail());
@@ -102,6 +106,7 @@ public class editProfileActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setLoading(true);
                 String nameStr = user_displayname.getText().toString();
                 String emailStr = user_email.getText().toString();
                 passStr = user_pass.getText().toString();
@@ -112,7 +117,6 @@ public class editProfileActivity extends AppCompatActivity {
                 if (nameStr.isEmpty()){
                     Toast.makeText(getApplicationContext(),"กรุณากรอกข้อมูลที่จำเป็น", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(getApplicationContext(),"Working...", Toast.LENGTH_LONG).show();
                     final User user = new User(nameStr, emailStr, phoneStr,aboutStr);
 
                     //if not input newPassword
@@ -133,6 +137,7 @@ public class editProfileActivity extends AppCompatActivity {
                                         Log.d(TAG, "Password updated");
                                         updateUser(user);
                                     } else {
+                                        setLoading(false);
                                         Log.d(TAG, "Password update Error!!");
                                     }
                                 }
@@ -141,6 +146,7 @@ public class editProfileActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
+                            setLoading(false);
                             Toast.makeText(getApplicationContext(),"กรอกรหัสผ่านเก่าไม่ถูกต้อง", Toast.LENGTH_LONG).show();
                         }
                     });
@@ -159,9 +165,10 @@ public class editProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(),"Saved Changes", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"บันทึกข้อมูลเรียบร้อย", Toast.LENGTH_LONG).show();
                     finish();
                 }else{
+                    setLoading(false);
                     Toast.makeText(getApplicationContext(),task.getException().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
@@ -256,5 +263,16 @@ public class editProfileActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void setLoading(boolean isLoading) {
+        if (isLoading) {
+            btn_save.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            btn_save.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
 
 }

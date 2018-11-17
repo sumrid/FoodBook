@@ -27,19 +27,20 @@
             android:ellipsize="end"
             android:fontFamily="@font/kanit"
             android:maxLines="1"
-            android:maxEms="7"
+            android:maxEms="9"
             android:textColor="@color/food_name"
             android:textSize="17dp"
-            tools:text="ผัดกระเพราไก่" />
+            tools:text="ผัดกระเพราไก่asdasdasdasdasdadsd" />
 
         <TextView
             android:id="@+id/food_description_item"
-            android:layout_width="170dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/food_name_item"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@id/food_image_item"
             android:fontFamily="@font/notosans_regular"
+            android:ems="12"
             android:maxLines="2"
             android:ellipsize="end"
             android:textColor="@color/food_detail"
