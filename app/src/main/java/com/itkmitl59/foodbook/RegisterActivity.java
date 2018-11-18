@@ -146,8 +146,8 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                saveUserInfo(mAuth.getUid(),user);
                 if(profileImageUri!=null) uploadImage(mAuth.getUid());
+                saveUserInfo(mAuth.getUid(),user);
                 Toast.makeText(getApplicationContext(), "ลงทะเบียนเรียบร้อย", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -158,10 +158,8 @@ public class RegisterActivity extends AppCompatActivity {
                 setLoading(false);
                 Log.d("RegisterResult", e.getMessage());
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-
             }
         });
-
     }
 
     private void saveUserInfo(String userUid, User user){
@@ -170,6 +168,8 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Save UserInfo Success!!");
+                        mAuth.getCurrentUser();
+                        mAuth.signOut();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -189,7 +189,6 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Log.d(TAG, "Upload Image Success!!");
-                            mAuth.signOut();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override

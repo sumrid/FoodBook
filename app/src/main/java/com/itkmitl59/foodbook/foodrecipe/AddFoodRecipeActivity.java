@@ -390,7 +390,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     private void loadLocalData() {
         String key = "recipe_" + auth.getCurrentUser().getUid();
-        mFoodRecipe = (FoodRecipe) getIntent().getSerializableExtra(key);
+        mFoodRecipe = (FoodRecipe) getIntent().getSerializableExtra("recipe");
 
         if (mFoodRecipe != null) {
             showLog("local id " + mFoodRecipe.getUid());
