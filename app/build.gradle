@@ -39,5 +39,6 @@ dependencies {
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
     implementation 'joda-time:joda-time:2.10.1'
     implementation "com.orhanobut:hawk:2.0.1"
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 apply plugin: 'com.google.gms.google-services'

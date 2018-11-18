@@ -14,11 +14,13 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.itkmitl59.foodbook.R;
@@ -29,6 +31,7 @@ public class AddHowToActivity extends AppCompatActivity {
     private ImageView image;
     private EditText message;
     private Button addBtn;
+    private ProgressBar progressBar;
 
     private HowTo mHowTo;
     private Uri imageUri;
@@ -51,6 +54,7 @@ public class AddHowToActivity extends AppCompatActivity {
         image = findViewById(R.id.add_how_to_image);
         message = findViewById(R.id.add_how_to_text);
         addBtn = findViewById(R.id.add_how_to_button);
+        progressBar = findViewById(R.id.upload);
 
         image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +85,7 @@ public class AddHowToActivity extends AppCompatActivity {
             imageUri = data.getData();
             Picasso.get().load(imageUri).into(image);
             uploadImage();
+            showLoading(true);
         }
     }
 
@@ -115,12 +120,14 @@ public class AddHowToActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             getImageUrl(fileName);
+                            showLoading(false);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     log("Upload Fail! " + e.toString());
                     showToast("Upload Fail! " + e.toString());
+                    showLoading(false);
                 }
             });
         } else {
@@ -153,5 +160,10 @@ public class AddHowToActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showLoading(boolean showLoading) {
+        if(showLoading) progressBar.setVisibility(View.VISIBLE);
+        else progressBar.setVisibility(View.GONE);
     }
 }

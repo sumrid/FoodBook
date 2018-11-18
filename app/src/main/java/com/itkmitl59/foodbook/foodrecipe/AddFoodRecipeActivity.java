@@ -3,6 +3,7 @@ package com.itkmitl59.foodbook.foodrecipe;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,13 +31,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.itkmitl59.foodbook.MainActivity;
 import com.itkmitl59.foodbook.R;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -343,15 +348,61 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
     }
 
     private void localSave() {
-        if (Hawk.isBuilt() == false) Hawk.init(this).build();
-        boolean saved = false;
+//        if (Hawk.isBuilt() == false) Hawk.init(this).build();
+//        boolean saved = false;
+//
+//        String key = "recipe_" + auth.getCurrentUser().getUid();
+//        List<FoodRecipe> foodRecipes = new ArrayList<>();
+//
+//        // get data
+//        if (Hawk.get(key) != null) {
+//            ArrayList<FoodRecipe> dataSet = Hawk.get(key);
+//            foodRecipes.addAll(dataSet);
+//        }
+//
+//        // check if already saved
+//        if (mFoodRecipe != null) {
+//            for (FoodRecipe item : foodRecipes) {
+//                if (item.getUid().equals(mFoodRecipe.getUid())) saved = true;
+//            }
+//        } else {
+//            mFoodRecipe = new FoodRecipe();
+//        }
+//
+//        if (!saved) { // if it first save..  then set ID for save. (int index)
+//            mFoodRecipe.setUid(foodRecipes.size() + "");
+//        }
+//
+//        if(imageUri != null)mFoodRecipe.setMainImageUrl(imageUri.toString());
+//        mFoodRecipe.setName(foodName.getText().toString());
+//        mFoodRecipe.setDescription(foodDescription.getText().toString());
+//        mFoodRecipe.setIngredients(foodIngredients.getText().toString());
+//        mFoodRecipe.setHowTos(howTo);
+//        mFoodRecipe.setCategory(foodCategory.getText().toString());
+//        showLog("save " + howTo);
+//
+//        // update
+//        if (saved) {
+//            int index = Integer.parseInt(mFoodRecipe.getUid());
+//            foodRecipes.set(index, mFoodRecipe);
+//        } else {
+//            foodRecipes.add(mFoodRecipe);
+//        }
+//
+//        // save
+//        Hawk.put(key, foodRecipes);
 
         String key = "recipe_" + auth.getCurrentUser().getUid();
-        List<FoodRecipe> foodRecipes = new ArrayList<>();
+        ArrayList<FoodRecipe> foodRecipes = new ArrayList<>();
+        boolean saved = false;
 
-        // get data
-        if (Hawk.get(key) != null) {
-            ArrayList<FoodRecipe> dataSet = Hawk.get(key);
+        Gson gson = new Gson();
+        SharedPreferences preferences = getSharedPreferences("foodBook", MODE_PRIVATE);
+        String json = preferences.getString(key, null);
+
+        if(json != null) {
+            Type type = new TypeToken<ArrayList<FoodRecipe>>(){}.getType();
+            ArrayList<FoodRecipe> dataSet = gson.fromJson(json, type);         // convert json to object.
             foodRecipes.addAll(dataSet);
         }
 
@@ -385,11 +436,10 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         }
 
         // save
-        Hawk.put(key, foodRecipes);
+        preferences.edit().putString(key, gson.toJson(foodRecipes)).commit();
     }
 
     private void loadLocalData() {
-        String key = "recipe_" + auth.getCurrentUser().getUid();
         mFoodRecipe = (FoodRecipe) getIntent().getSerializableExtra("recipe");
 
         if (mFoodRecipe != null) {

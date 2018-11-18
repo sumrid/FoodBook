@@ -1,5 +1,7 @@
 package com.itkmitl59.foodbook.profile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,11 +21,14 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.foodrecipe.DividerItem;
 import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.orhanobut.hawk.Hawk;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class myfoodsPage extends Fragment {
@@ -114,11 +119,16 @@ public class myfoodsPage extends Fragment {
     }
 
     private void getLocalData() {
-        if (Hawk.isBuilt() == false) Hawk.init(getContext()).build();
-
         String key = "recipe_" + auth.getCurrentUser().getUid();
-        if (Hawk.get(key) != null) {
-            ArrayList<FoodRecipe> dataSet = Hawk.get(key);
+
+        Gson gson = new Gson();
+        SharedPreferences preferences = getContext().getSharedPreferences("foodBook", Context.MODE_PRIVATE);
+        Type type = new TypeToken<ArrayList<FoodRecipe>>(){}.getType();
+        String json = preferences.getString(key, null);
+
+        if (json != null) {
+            ArrayList<FoodRecipe> dataSet = gson.fromJson(json, type);
+
             foodRecipes.clear();
             foodRecipes.addAll(dataSet);
             adapter.notifyDataSetChanged();

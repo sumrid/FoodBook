@@ -2,6 +2,7 @@ package com.itkmitl59.foodbook.profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,13 +13,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.itkmitl59.foodbook.R;
 import com.itkmitl59.foodbook.comment.Comment;
 import com.itkmitl59.foodbook.foodrecipe.AddFoodRecipeActivity;
@@ -27,6 +32,7 @@ import com.itkmitl59.foodbook.foodrecipe.FoodRecipe;
 import com.orhanobut.hawk.Hawk;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +41,8 @@ import javax.annotation.Nullable;
 public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHolder>  {
     private ArrayList<FoodRecipe> mFoodRecipes;
     private Context mContext;
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView foodImage;
@@ -89,18 +97,22 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
         getCommentCount(holder.commentCount, foodRecipe.getUid());
 
         if (foodRecipe.getUid().length() < 5) holder.delete.setVisibility(View.VISIBLE);
+//        if(mAuth.getCurrentUser().getUid().equals(foodRecipe.getOwner()) || foodRecipe.getUid().length() < 5)
+//            holder.delete.setVisibility(View.VISIBLE);
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteLocalSave(foodRecipe);
+                if(foodRecipe.getUid().length() < 5) deleteLocalSave(foodRecipe);
+                else deleteOnFirebase(foodRecipe.getUid());
             }
         });
 
         holder.setOnItemClickListener(new ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                if(foodRecipe.getUid().length() < 5) startEditIntent(position);
-                else startIntent(foodRecipe.getUid());
+                if(foodRecipe.getUid().length() < 5) startEditIntent(position);    // go to edit intent
+                else startIntent(foodRecipe.getUid());               // view food intent
             }
         });
     }
@@ -147,26 +159,62 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
     private void deleteLocalSave(FoodRecipe item) {
         Log.d("Adapter", "click item " + item.getUid());
 
-        if (Hawk.isBuilt() == false) Hawk.init(mContext).build();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String key = "recipe_" + auth.getCurrentUser().getUid();
+
+        SharedPreferences preferences = mContext.getSharedPreferences("foodBook", Context.MODE_PRIVATE);
+        String json = preferences.getString(key, null);
+        if (json != null) {
+            Type type = new TypeToken<ArrayList<FoodRecipe>>(){}.getType();
+            ArrayList<FoodRecipe> dataSet = new Gson().fromJson(json, type);
+            int index = -1;
+
+            for(FoodRecipe i : dataSet) {
+                if (i.getUid().equals(item.getUid())) index = dataSet.indexOf(i);
+            }
+
+            dataSet.remove(index);
+
+            preferences.edit().putString(key, new Gson().toJson(dataSet)).commit();
+
+            mFoodRecipes.clear();
+            mFoodRecipes.addAll(dataSet);
+            notifyItemRemoved(index);
+        }
+    }
+
+    private void deleteLocalSave(int index) {
+        Log.d("Adapter", "click item " + index);
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String key = "recipe_" + auth.getCurrentUser().getUid();
 
-        if( Hawk.get(key) != null) {
-            ArrayList<FoodRecipe> items = Hawk.get(key);
-            int index = -1;
+        SharedPreferences preferences = mContext.getSharedPreferences("foodBook", Context.MODE_PRIVATE);
+        String json = preferences.getString(key, null);
+        if (json != null) {
+            Type type = new TypeToken<ArrayList<FoodRecipe>>(){}.getType();
+            ArrayList<FoodRecipe> dataSet = new Gson().fromJson(json, type);
 
-            for(FoodRecipe recipe : items) {
-                if (recipe.getUid().equals(item.getUid())) index = items.indexOf(recipe);
-            }
+            dataSet.remove(index);
 
-            items.remove(index);
-
-            Hawk.put(key, items);
+            preferences.edit().putString(key, new Gson().toJson(dataSet)).commit();
 
             mFoodRecipes.clear();
-            mFoodRecipes.addAll(items);
+            mFoodRecipes.addAll(dataSet);
             notifyItemRemoved(index);
         }
+    }
+
+    private void deleteOnFirebase(String uid) {
+        FirebaseFirestore store = FirebaseFirestore.getInstance();
+        store.collection("FoodRecipes")
+                .document(uid)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(mContext, "ลบเรียบร้อย", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
