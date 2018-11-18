@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -148,8 +149,11 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
 
         if (Hawk.isBuilt() == false) Hawk.init(mContext).build();
 
-        if( Hawk.get("recipe") != null) {
-            ArrayList<FoodRecipe> items = Hawk.get("recipe");
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String key = "recipe_" + auth.getCurrentUser().getUid();
+
+        if( Hawk.get(key) != null) {
+            ArrayList<FoodRecipe> items = Hawk.get(key);
             int index = -1;
 
             for(FoodRecipe recipe : items) {
@@ -158,7 +162,7 @@ public class myfoodsAdapter extends RecyclerView.Adapter<myfoodsAdapter.ViewHold
 
             items.remove(index);
 
-            Hawk.put("recipe", items);
+            Hawk.put(key, items);
 
             mFoodRecipes.clear();
             mFoodRecipes.addAll(items);

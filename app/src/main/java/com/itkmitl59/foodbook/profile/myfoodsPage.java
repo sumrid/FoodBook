@@ -116,8 +116,9 @@ public class myfoodsPage extends Fragment {
     private void getLocalData() {
         if (Hawk.isBuilt() == false) Hawk.init(getContext()).build();
 
-        if (Hawk.get("recipe") != null) {
-            ArrayList<FoodRecipe> dataSet = Hawk.get("recipe");
+        String key = "recipe_" + auth.getCurrentUser().getUid();
+        if (Hawk.get(key) != null) {
+            ArrayList<FoodRecipe> dataSet = Hawk.get(key);
             foodRecipes.clear();
             foodRecipes.addAll(dataSet);
             adapter.notifyDataSetChanged();

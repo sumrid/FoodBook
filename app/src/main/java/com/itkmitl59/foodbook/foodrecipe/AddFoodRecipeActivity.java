@@ -56,6 +56,7 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
 
     private FirebaseFirestore firestore = FirebaseFirestore.getInstance();
     private FirebaseStorage storage = FirebaseStorage.getInstance();
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
 
 
     @Override
@@ -345,11 +346,12 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         if (Hawk.isBuilt() == false) Hawk.init(this).build();
         boolean saved = false;
 
+        String key = "recipe_" + auth.getCurrentUser().getUid();
         List<FoodRecipe> foodRecipes = new ArrayList<>();
 
         // get data
-        if (Hawk.get("recipe") != null) {
-            ArrayList<FoodRecipe> dataSet = Hawk.get("recipe");
+        if (Hawk.get(key) != null) {
+            ArrayList<FoodRecipe> dataSet = Hawk.get(key);
             foodRecipes.addAll(dataSet);
         }
 
@@ -383,11 +385,12 @@ public class AddFoodRecipeActivity extends AppCompatActivity {
         }
 
         // save
-        Hawk.put("recipe", foodRecipes);
+        Hawk.put(key, foodRecipes);
     }
 
     private void loadLocalData() {
-        mFoodRecipe = (FoodRecipe) getIntent().getSerializableExtra("recipe");
+        String key = "recipe_" + auth.getCurrentUser().getUid();
+        mFoodRecipe = (FoodRecipe) getIntent().getSerializableExtra(key);
 
         if (mFoodRecipe != null) {
             showLog("local id " + mFoodRecipe.getUid());
